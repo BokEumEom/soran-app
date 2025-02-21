@@ -51,6 +51,10 @@ export default function RootLayout() {
     SpoqaHanSansNeo: {
       uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/SpoqaHanSansNeo-Medium.ttf',
     },
+    // 추가: HSYuji-Regular 폰트 (woff 형식)
+    'HSYuji-Regular': {
+      uri: 'https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff',
+    },
   });
 
   // 폰트 로딩 완료 시 스플래시 화면 숨김 및 /onboarding으로 리디렉션
@@ -76,7 +80,7 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="onboarding" />
               <Stack.Screen name="emotions" />
-              <Stack.Screen name="quest" />
+              <Stack.Screen name="self-praise" />
               <Stack.Screen name="scenario" />
               <Stack.Screen name="game" />
               <Stack.Screen name="mbti" />

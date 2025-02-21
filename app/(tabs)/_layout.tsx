@@ -97,20 +97,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="quests"
-        options={{
-          title: '퀘스트',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'ribbon' : 'ribbon-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="dashboard"
         options={{
           title: '대시보드',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'pulse-sharp' : 'pulse-outline'} color={color} />
+            <TabBarIcon name={focused ? 'bar-chart-sharp' : 'bar-chart-outline'} color={color} />
           ),
         }}
       />

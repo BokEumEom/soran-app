@@ -46,11 +46,11 @@ const dashboardData: {
     link: '/meditate',
   },
   {
-    title: '퀘스트',
-    subtitle: '신뢰 쌓기',
+    title: '세모동화',
+    subtitle: '마음 평안',
     icon: Award, // Lucide icon
     colors: ['#d4fc79', '#96e6a1'],
-    link: '/quest',
+    link: '/self-praise',
   },
 ];
 

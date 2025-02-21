@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const useFontSettings = () => {
-  const [fontFamily, setFontFamily] = useState<string>('NEXONLv2Gothic');
+  const [fontFamily, setFontFamily] = useState<string>('HSYuji-Regular');
   const [fontSize, setFontSize] = useState<number>(16);
 
   useEffect(() => {
