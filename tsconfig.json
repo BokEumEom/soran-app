@@ -2,6 +2,8 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "esModuleInterop": true,
+    "jsx": "react-native",
     "paths": {
       "@/*": [
         "./*"
@@ -12,6 +14,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "types", "app/game/spaceship/game.jsx", "components/spaceship/GameOver.jsx", "components/spaceship/Text.tsx", "utils/spaceship.js", "app/game/spaceship/index.jsx", "components/spaceship/landing.jsx", "app/game/flappybird/index.jsx", "components/flappybird/Obstacles.jsx", "components/flappybird/Bird.jsx", "components/flappybird/Score.jsx", "components/flappybird/Background.jsx", "app/game/watermelon.tsx", "stores/useGameStore.ts", "constants/FruitSizes.ts", "app/(tabs)/setting/_layout.tsx",
   ]
 }
