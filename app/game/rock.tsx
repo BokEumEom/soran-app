@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-n
 import { useRockPaperScissors } from '@/hooks/useRockPaperScissors';
 import ScoreBoard from '@/components/game/ScoreBoard';
 import ResultModal from '@/components/game/ResultModal';
-import { Header } from '@/components/common/Header';
 import ConfirmationModal from '@/components/common/Modal';
 
 // 이미지 타입 정의
@@ -42,8 +41,6 @@ export default function RockPaperScissorsGame() {
 
   return (
     <View style={styles.container}>
-      <Header title="Rock-ScissorsPaper-Paper" showBackButton />
-
       <View style={styles.content}>
         <View style={styles.wheel}>
           {currentImage && (

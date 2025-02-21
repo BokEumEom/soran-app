@@ -4,7 +4,6 @@ import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-na
 import { GameProvider, useGame } from '../../contexts/TileContext';
 import GameBoard from '../../components/puzzle/GameBoard';
 import ScoreBoard from '../../components/puzzle/ScoreBoard';
-import { Header } from '../../components/common/Header';
 import { Button } from '../../components/common/Button';
 import KeyboardControls from '../../components/puzzle/KeyboardControls';
 import ConfirmationModal from '../../components/common/Modal';
@@ -80,7 +79,6 @@ const PuzzleGame = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="2048" showBackButton titleColor="#000" />
       <Animated.View style={[styles.gameContainer, animatedStyle]} {...panResponder.panHandlers}>
         <ScoreBoard />
         <GameBoard />

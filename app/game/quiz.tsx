@@ -44,18 +44,20 @@ const QuizGame = () => {
     <View style={styles.container}>
       <Header title="Quiz Game" showBackButton titleColor="#000" />
 
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item, index) => index.toString()}
-        ListFooterComponent={renderTypingIndicator}
-        style={styles.chatList}
-        contentContainerStyle={styles.chatListContent}
-        onContentSizeChange={() => {
-          flatListRef.current?.scrollToEnd({ animated: true });
-        }}
-      />
+      <View style={styles.content}>
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={(item, index) => index.toString()}
+          ListFooterComponent={renderTypingIndicator}
+          style={styles.chatList}
+          contentContainerStyle={styles.chatListContent}
+          onContentSizeChange={() => {
+            flatListRef.current?.scrollToEnd({ animated: true });
+          }}
+        />
+      </View>
 
       {currentData?.type === 'question' && isOptionVisible && (
         <View style={styles.optionsContainer}>
@@ -99,6 +101,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F6FA',
     padding: 10,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+    alignItems: 'center',
   },
   chatList: {
     flex: 1,
