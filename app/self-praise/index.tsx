@@ -1,3 +1,4 @@
+// app/self-praise/index.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import ComplimentCard from '../../components/self-praise/ComplimentCard';
@@ -12,17 +13,14 @@ const Home = () => {
 
   const handleGetCompliment = () => {
     setAnimate(false); // 애니메이션 리셋
-
-    // 이전 애니메이션이 마무리될 시간을 고려하여 약간의 지연 후 상태 업데이트
     setTimeout(() => {
       const nextComplimentIndex = (complimentIndex + 1) % compliments.length;
       const nextImageIndex = (currentImageIndex + 1) % characters.length;
-
       setComplimentIndex(nextComplimentIndex);
       setCurrentImageIndex(nextImageIndex);
       setCompliment(compliments[nextComplimentIndex]);
       setAnimate(true); // 새 애니메이션 트리거
-    }, 300); // 지연시간을 300ms로 조정 (필요에 따라 조정 가능)
+    }, 300);
   };
 
   return (
