@@ -97,6 +97,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="fairytale"
+        options={{
+          title: '동화',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'book-sharp' : 'book-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="dashboard"
         options={{
           title: '대시보드',
