@@ -1,8 +1,8 @@
 import { LucideIcon } from 'lucide-react-native';
 
-export type GameOption = {
+export interface GameOption {
   title: string;
-  route: `/${string}`; // Type-safe route
-  colors: [string, string, ...string[]]; // Tuple with at least two colors
-  icon: LucideIcon;
-}; 
+  route: string;
+  colors: string[];
+  image: any; // 이전의 icon 대신 image로 변경
+} 

@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Image, Dimensions } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Image, Dimensions, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '@/constants/fairytale/colors';
-import { storyPages } from '@/constants/fairytale/stories';
 import Animated from 'react-native-reanimated';
 import { Header } from '@/components/fairytale/Header';
 import { StoryContent } from '../../../components/fairytale/StoryContent';
@@ -10,89 +8,189 @@ import { PageNavigation } from '../../../components/fairytale/PageNavigation';
 import { ProgressDots } from '../../../components/fairytale/ProgressDots';
 import { useStoryAnimation } from '@/hooks/useStoryAnimation';
 import { GestureDetector } from 'react-native-gesture-handler';
+import { COLORS } from '@/constants/fairytale/colors';
+import { storyPages } from '@/constants/fairytale/stories';
+import { useLocalSearchParams, Stack } from 'expo-router';
+import VideoPlayer from '@/components/fairytale/VideoPlayer';
+import CustomText from '@/components/common/CustomText';
+import { Asset } from 'expo-asset';
 
 const { width, height } = Dimensions.get('window');
-
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-export default function StoryDetailScreen() {
+// 비디오 파일 매핑
+const videoMapping: Record<string, any> = {
+  '1': require('@/assets/video/fairytale1.mov'),
+  '2': require('@/assets/video/fairytale2.mov'),
+  '3': require('@/assets/video/fairytale3.mov'),
+  // 필요한 만큼 비디오 파일 추가
+};
+
+const StoryScreen = () => {
+  const params = useLocalSearchParams();
+  const id = params.id as string;
+  const title = params.title as string;
+  
+  const [videoUri, setVideoUri] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const loadVideo = async () => {
+      try {
+        // id에 해당하는 비디오 파일이 있는지 확인
+        if (id && videoMapping[id]) {
+          // 로컬 asset을 URI로 변환
+          const asset = Asset.fromModule(videoMapping[id]);
+          await asset.downloadAsync();
+          setVideoUri(asset.localUri || asset.uri);
+        } else {
+          // 기본 비디오 파일 사용
+          const defaultVideo = require('@/assets/video/default.mov');
+          const asset = Asset.fromModule(defaultVideo);
+          await asset.downloadAsync();
+          setVideoUri(asset.localUri || asset.uri);
+        }
+      } catch (error) {
+        console.error('비디오 로딩 오류:', error);
+      }
+    };
+    
+    loadVideo();
+  }, [id]);
+  
+  const storyTitle = title || '전래동화 제목';
+
   const [currentPage, setCurrentPage] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState<Record<string | number, boolean>>({});
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
 
   const currentStory = storyPages[currentPage];
   if (!currentStory) {
     return (
-      <View style={styles.container}>
-        <Header />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <Stack.Screen options={{ title: storyTitle }} />
+        
+        {videoUri ? (
+          <VideoPlayer 
+            videoUri={videoUri}
+            title={storyTitle}
+          />
+        ) : (
+          <View style={styles.loadingContainer}>
+            <CustomText>비디오 로딩 중...</CustomText>
+          </View>
+        )}
+        
+        <View style={styles.descriptionContainer}>
+          <CustomText style={styles.descriptionText}>
+            이 전래동화는 한국의 전통적인 이야기로, 아이들에게 교훈을 전달합니다.
+          </CustomText>
+        </View>
+      </SafeAreaView>
     );
   }
 
-  const changePage = (direction: number) => {
+  const changePage = useCallback((direction: number) => {
     const newPage = currentPage + direction;
     if (newPage >= 0 && newPage < storyPages.length) {
       setCurrentPage(newPage);
     }
-  };
+  }, [currentPage]);
 
-  // useStoryAnimation 훅에서 제스처 핸들러와 페이지 이동 애니메이션 스타일을 함께 받아옴
-  const { titleStyle, imageAnimatedStyle, panGesture, pageStyle } = useStoryAnimation(currentPage, changePage);
+  const { 
+    titleStyle, 
+    imageAnimatedStyle, 
+    panGesture, 
+    pageStyle, 
+    resetAnimations 
+  } = useStoryAnimation(currentPage, changePage);
 
-  const handleLoadChange = (id: string | number, isLoaded: boolean) => {
-    setImagesLoaded(prev => ({
-      ...prev,
-      [id]: isLoaded,
-    }));
-  };
+  const handleLoadChange = useCallback((id: string | number, isLoaded: boolean) => {
+    // 이미지 로드 완료 시 배경 이미지 설정 및 애니메이션 초기화
+    if (isLoaded && id === currentPage) {
+      setBackgroundImage(currentStory.image);
+      resetAnimations();
+    }
+  }, [currentPage, currentStory.image, resetAnimations]);
+
+  useEffect(() => {
+    if (currentPage < storyPages.length - 1) {
+      const nextImageUrl = storyPages[currentPage + 1].image;
+      Image.prefetch(nextImageUrl).catch(error => {
+        console.log('Image prefetch error:', error);
+      });
+    }
+  }, [currentPage]);
 
   return (
-    <View style={styles.container}>
-      <Header />
-      <LinearGradient colors={COLORS.background} style={styles.background}>
-        <GestureDetector gesture={panGesture}>
-          <Animated.View style={[styles.pageContainer, pageStyle]}>
-            <AnimatedImage
-              source={{ uri: currentStory.image }}
-              style={[styles.storyImage, imageAnimatedStyle]}
-              onLoadStart={() => handleLoadChange(currentPage, false)}
-              onLoadEnd={() => handleLoadChange(currentPage, true)}
-              onError={(e) => {
-                console.log('Image load error:', e.nativeEvent.error);
-                handleLoadChange(currentPage, true);
-              }}
+    <SafeAreaView style={styles.container}>
+      <Stack.Screen options={{ title: storyTitle }} />
+      
+      {videoUri ? (
+        <VideoPlayer 
+          videoUri={videoUri}
+          title={storyTitle}
+        />
+      ) : (
+        <View style={styles.loadingContainer}>
+          <CustomText>비디오 로딩 중...</CustomText>
+        </View>
+      )}
+      
+      <View style={styles.descriptionContainer}>
+        <CustomText style={styles.descriptionText}>
+          이 전래동화는 한국의 전통적인 이야기로, 아이들에게 교훈을 전달합니다.
+        </CustomText>
+      </View>
+      
+      <View style={styles.container}>
+        <Header />
+        <LinearGradient colors={COLORS.background} style={styles.background}>
+          {backgroundImage && (
+            <Animated.Image
+              source={{ uri: backgroundImage }}
+              style={[StyleSheet.absoluteFillObject, styles.backgroundImage]}
+              blurRadius={30}
             />
-            <StoryContent
-              title={currentStory.title}
-              text={currentStory.text}
-              titleStyle={titleStyle}
-            />
-            <PageNavigation
-              currentPage={currentPage}
-              totalPages={storyPages.length}
-              onChangePage={changePage}
-            />
-            <ProgressDots
-              currentPage={currentPage}
-              totalPages={storyPages.length}
-            />
-          </Animated.View>
-        </GestureDetector>
-      </LinearGradient>
-    </View>
+          )}
+          <GestureDetector gesture={panGesture}>
+            <Animated.View style={[styles.pageContainer, pageStyle]}>
+              <AnimatedImage
+                source={{ uri: currentStory.image }}
+                style={[styles.storyImage, imageAnimatedStyle]}
+                onLoadStart={() => handleLoadChange(currentPage, false)}
+                onLoadEnd={() => handleLoadChange(currentPage, true)}
+                onError={(e) => {
+                  console.log('Image load error:', e.nativeEvent.error);
+                  handleLoadChange(currentPage, true);
+                }}
+              />
+              <StoryContent
+                title={currentStory.title}
+                text={currentStory.text}
+                titleStyle={titleStyle}
+              />
+              <PageNavigation
+                currentPage={currentPage}
+                totalPages={storyPages.length}
+                onChangePage={changePage}
+              />
+              <ProgressDots
+                currentPage={currentPage}
+                totalPages={storyPages.length}
+              />
+            </Animated.View>
+          </GestureDetector>
+        </LinearGradient>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    flex: 1,
-    padding: 20,
-  },
+  container: { flex: 1 },
+  background: { flex: 1, padding: 20 },
   pageContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 25,
     padding: 20,
     shadowColor: '#000',
@@ -108,4 +206,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#f0f0f0',
   },
+  backgroundImage: { opacity: 0.5 },
+  descriptionContainer: {
+    padding: 16,
+  },
+  descriptionText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
+
+export default StoryScreen;

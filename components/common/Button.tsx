@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
-  TouchableOpacity, 
-  Text, 
+  TouchableOpacity,  
   StyleSheet, 
   ActivityIndicator, 
   View, 
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ButtonProps } from '../../types/common';
+import CustomText from "@/components/common/CustomText";
 
 interface CustomButtonProps extends ButtonProps {
   gradientColors?: string[];
@@ -42,7 +42,7 @@ export const Button: React.FC<CustomButtonProps> = ({
           {loading ? (
             <ActivityIndicator color="#FFFFFF" />
           ) : (
-            <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+            <CustomText style={[styles.buttonText, textStyle]}>{title}</CustomText>
           )}
         </LinearGradient>
       ) : (
@@ -50,7 +50,7 @@ export const Button: React.FC<CustomButtonProps> = ({
           {loading ? (
             <ActivityIndicator color="#FFFFFF" />
           ) : (
-            <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+            <CustomText style={[styles.buttonText, textStyle]}>{title}</CustomText>
           )}
         </View>
       )}

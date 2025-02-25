@@ -8,7 +8,7 @@ import useMusicPlayer from '@/hooks/useMusicPlayer';
 import { useRouter } from 'expo-router';
 
 const MusicChangeScreen = () => {
-  const { selectedSong, selectSong, stopMusic } = useMusicPlayer(songs, songs[0].name);
+  const { selectedSong, selectSong, stopMusic, isPlaying } = useMusicPlayer(songs, songs[0].name);
   const router = useRouter();
 
   // 뒤로 가기 처리
@@ -30,8 +30,11 @@ const MusicChangeScreen = () => {
 
   const handleSelectSong = async (song: { name: string; file: any }) => {
     try {
-      await selectSong(song.name);
+      const previousState = isPlaying;
+      await selectSong(song.name, previousState);
       alert(`음악 "${song.name}" 으로 변경되었습니다.`);
+      // 선택 후 자동으로 이전 화면으로 돌아가기
+      setTimeout(() => router.back(), 1000);
     } catch (error) {
       console.error('Failed to select and play song:', error);
     }

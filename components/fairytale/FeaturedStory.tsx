@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import CustomText from "@/components/common/CustomText";
 import { Story } from './types';
 import { StoryImage } from './StoryImage';
 
@@ -10,9 +11,13 @@ interface FeaturedStoryProps {
   onImageLoadChange: (id: string | number, isLoaded: boolean) => void;
 }
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const ITEM_WIDTH = screenWidth * 0.9;
+const ITEM_HEIGHT = screenHeight / 2.5;
+
 export const FeaturedStory = ({ story, onPress, imagesLoaded, onImageLoadChange }: FeaturedStoryProps) => (
   <View style={styles.featuredContainer}>
-    <Text style={styles.sectionTitle}>오늘의 동화</Text>
+    <CustomText style={styles.sectionTitle}>오늘의 동화</CustomText>
     <TouchableOpacity style={styles.featuredCard} onPress={onPress}>
       <StoryImage
         uri={story.image}
@@ -22,8 +27,8 @@ export const FeaturedStory = ({ story, onPress, imagesLoaded, onImageLoadChange 
         onLoadChange={(id, isLoaded) => onImageLoadChange(id, isLoaded)}
       />
       <View style={styles.featuredContent}>
-        <Text style={styles.featuredTitle}>{story.title}</Text>
-        <Text style={styles.featuredDescription}>{story.description}</Text>
+        <CustomText style={styles.featuredTitle}>{story.title}</CustomText>
+        <CustomText style={styles.featuredDescription}>{story.description}</CustomText>
       </View>
     </TouchableOpacity>
   </View>
@@ -31,40 +36,34 @@ export const FeaturedStory = ({ story, onPress, imagesLoaded, onImageLoadChange 
 
 const styles = StyleSheet.create({
   featuredContainer: {
-    padding: 20,
+    padding: screenWidth * 0.05,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: screenWidth * 0.05,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: screenWidth * 0.04,
     color: '#444',
   },
   featuredCard: {
     backgroundColor: '#FFF',
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderRadius: screenWidth * 0.04,
   },
   featuredImage: {
-    width: '100%',
-    height: 200,
+    width: ITEM_WIDTH,
+    height: ITEM_HEIGHT
   },
   featuredContent: {
-    padding: 16,
+    padding: screenWidth * 0.04,
   },
   featuredTitle: {
-    fontSize: 18,
+    fontSize: screenWidth * 0.045,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: screenWidth * 0.02,
     color: '#333',
   },
   featuredDescription: {
-    fontSize: 14,
+    fontSize: screenWidth * 0.035,
     color: '#666',
-    lineHeight: 20,
+    lineHeight: screenWidth * 0.05,
   },
 }); 

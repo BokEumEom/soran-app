@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useEmotionContext } from '../../contexts/EmotionContext';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Header } from '../../components/common/Header';
+import { Header } from '../../components/fairytale/Header';
 import { Button } from '../../components/common/Button';
 import { EmotionBar } from '../../components/scenario/EmotionBar';
 
@@ -21,7 +21,7 @@ export const EndingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="결과 요약" showBackButton={false} />
+      <Header />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* 쿼리에서 받은 메시지 표시 */}
@@ -98,10 +98,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     padding: 15,
     backgroundColor: '#F5F5F5',
+    marginBottom: 30
   },
   button: {
     borderRadius: 25,
-    marginVertical: 10, // 버튼 간의 간격을 더 넓게
+    marginVertical: 5, // 버튼 간의 간격을 더 넓게
   },
   buttonText: {
     fontSize: 18,

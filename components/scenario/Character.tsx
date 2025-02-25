@@ -44,9 +44,8 @@ export const Character = () => {
 
 const styles = StyleSheet.create({
   character: {
-    width: 120,
-    height: 120,
+    width: 250,
+    height: 250,
     alignSelf: 'center',
-    marginVertical: 20,
   },
 });

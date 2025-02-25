@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import CustomText from "@/components/common/CustomText";
 import { Story } from './types';
 import { StoryImage } from './StoryImage';
+
+// Get screen dimensions
+const { width, height } = Dimensions.get('window');
 
 interface RecentStoriesProps {
   stories: Story[];
@@ -12,7 +16,7 @@ interface RecentStoriesProps {
 
 export const RecentStories = ({ stories, onStoryPress, imagesLoaded, onImageLoadChange }: RecentStoriesProps) => (
   <View style={styles.recentContainer}>
-    <Text style={styles.sectionTitle}>최근 동화</Text>
+    <CustomText style={styles.sectionTitle}>최근 동화</CustomText>
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {stories.map((story) => (
         <TouchableOpacity 
@@ -27,7 +31,7 @@ export const RecentStories = ({ stories, onStoryPress, imagesLoaded, onImageLoad
             imagesLoaded={imagesLoaded}
             onLoadChange={(id, isLoaded) => onImageLoadChange(id, isLoaded)}
           />
-          <Text style={styles.recentTitle}>{story.title}</Text>
+          <CustomText style={styles.recentTitle}>{story.title}</CustomText>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -36,34 +40,27 @@ export const RecentStories = ({ stories, onStoryPress, imagesLoaded, onImageLoad
 
 const styles = StyleSheet.create({
   recentContainer: {
-    padding: 20,
+    paddingHorizontal: 15,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: width * 0.05, // 5% of screen width
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: width * 0.04, // 4% of screen width
     color: '#444',
   },
   recentCard: {
-    width: 140,
-    marginRight: 16,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    marginLeft: 8,
+    alignItems: 'center',
   },
   recentImage: {
-    width: 140,
-    height: 140,
+    width: width * 0.26,
+    height: height * 0.17,
+    borderRadius: width * 0.04,
   },
   recentTitle: {
-    fontSize: 14,
+    fontSize: width * 0.035, // 3.5% of screen width
     fontWeight: '600',
-    padding: 12,
+    padding: width * 0.03, // 3% of screen width
     color: '#333',
     textAlign: 'center',
   },

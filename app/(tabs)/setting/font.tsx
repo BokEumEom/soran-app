@@ -4,10 +4,10 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Header } from '../../../components/fairytale/Header';
-import { Ionicons } from '@expo/vector-icons';
 import CustomText from '@/components/common/CustomText';
 import { useFontSettingsContext } from '@/contexts/FontSettingsContext';
 import { FONTS } from '@/constants/fonts';
+import { Check } from 'lucide-react-native';
 
 const FontSelectionScreen = () => {
   const { fontFamily, fontSize, updateFontFamily, updateFontSize } = useFontSettingsContext();
@@ -47,7 +47,7 @@ const FontSelectionScreen = () => {
             <CustomText style={[styles.fontText, { fontSize, fontFamily: value }]}>
               {label}
             </CustomText>
-            {fontFamily === value && <Ionicons name="checkmark" size={20} color="black" />}
+            {fontFamily === value && <Check size={20} color="black" />}
           </TouchableOpacity>
         ))}
       </ScrollView>

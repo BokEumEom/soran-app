@@ -116,12 +116,27 @@ const useMusicPlayer = (initialSongs: Song[], initialSongName: string) => {
     }
   };
 
-  const selectSong = async (songName: string) => {
+  const selectSong = async (songName: string, shouldPlay = true) => {
     try {
       const song = initialSongs.find((s) => s.name === songName);
       if (song) {
         setSelectedSong(songName);
-        await playMusic(song);
+        if (shouldPlay) {
+          await playMusic(song);
+        } else {
+          // 재생하지 않고 선택만 변경
+          if (sound) {
+            const status = await sound.getStatusAsync();
+            if (status.isLoaded) {
+              await sound.stopAsync();
+              await sound.unloadAsync();
+            }
+          }
+          setSound(null);
+          setIsPlaying(false);
+          await setStoredItem('selectedSong', songName);
+          await setStoredItem('isPlaying', 'false');
+        }
       }
     } catch (error) {
       console.error('Failed to select song:', error);

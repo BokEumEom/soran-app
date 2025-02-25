@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { EmotionContext } from '../../contexts/EmotionContext';
+import CustomText from "@/components/common/CustomText";
 
 export const EmotionBar = () => {
   const { emotionState } = useContext(EmotionContext);
@@ -10,7 +11,7 @@ export const EmotionBar = () => {
     <View style={styles.container}>
       {emotions.map((emotion) => (
         <View key={emotion} style={styles.barContainer}>
-          <Text style={styles.label}>{capitalize(emotion)}</Text>
+          <CustomText style={styles.label}>{capitalize(emotion)}</CustomText>
           <View style={styles.barBackground}>
             <View
               style={[
@@ -47,28 +48,21 @@ const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
-    backgroundColor: '#F8F9FA', // Soft light background
     borderRadius: 10,
-    marginVertical: 15,
+    marginBottom: 20,
   },
   barContainer: {
-    marginBottom: 15,
+    marginBottom: 10,
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#2D3142',
-    marginBottom: 8,
   },
   barBackground: {
     height: 15,
     backgroundColor: '#E0E0E0',
     borderRadius: 7.5, // More rounded corners
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3,
     overflow: 'hidden',
   },
   barFill: {

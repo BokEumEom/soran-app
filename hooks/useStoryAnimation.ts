@@ -8,7 +8,9 @@ import Animated, {
   withSpring,
   interpolate,
   cancelAnimation,
-  runOnJS
+  runOnJS,
+  Extrapolation,
+  withDelay
 } from 'react-native-reanimated';
 import { Gesture } from 'react-native-gesture-handler';
 
@@ -20,86 +22,124 @@ export const useStoryAnimation = (
   currentPage: number, 
   onChangePage: (direction: number) => void
 ) => {
-  // 기본 애니메이션 공유값
+  // 기존 애니메이션 공유값
   const titleAnimation = useSharedValue(0);
   const imageAnimation = useSharedValue(0);
   const imageFloat = useSharedValue(0);
+  
+  // 제스처 및 전환 관련 공유값
   const dragX = useSharedValue(0);
   const pageOpacity = useSharedValue(1);
+  const containerScale = useSharedValue(1); // 페이드 & 스케일 효과를 위한 값
 
-  useEffect(() => {
-    // 페이지 전환 시 초기화
+  // 애니메이션 초기화 함수
+  const resetAnimations = () => {
+    cancelAnimation(titleAnimation);
+    cancelAnimation(imageAnimation);
+    cancelAnimation(imageFloat);
+    
     titleAnimation.value = 0;
     imageAnimation.value = 0;
     imageFloat.value = 0;
+    
+    titleAnimation.value = withDelay(100, withTiming(1, { duration: 400 }));
+    imageAnimation.value = withTiming(1, { duration: 300 });
+    
+    // 플로팅 효과 (수직 이동)
+    setTimeout(() => {
+      imageFloat.value = withTiming(1, { duration: 1500 }, () => {
+        const loop = () => {
+          imageFloat.value = 0;
+          imageFloat.value = withTiming(1, { duration: 3000 }, (finished) => {
+            if (finished) loop();
+          });
+        };
+        loop();
+      });
+    }, 300);
+  };
+
+  useEffect(() => {
+    resetAnimations();
+    dragX.value = 0;
     pageOpacity.value = 1;
-
-    titleAnimation.value = withTiming(1, { duration: 500 });
-    imageAnimation.value = withTiming(1, { duration: 500 });
-    imageFloat.value = withTiming(1, { duration: 500 });
-
+    containerScale.value = 1;
     return () => {
       cancelAnimation(titleAnimation);
       cancelAnimation(imageAnimation);
       cancelAnimation(imageFloat);
+      cancelAnimation(dragX);
+      cancelAnimation(pageOpacity);
+      cancelAnimation(containerScale);
     };
   }, [currentPage]);
 
-  const titleStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: interpolate(titleAnimation.value, [0, 1], [50, 0]) },
-      { scale: interpolate(titleAnimation.value, [0, 1], [0.8, 1]) },
-    ],
-    opacity: titleAnimation.value,
-  }));
-
-  const imageAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: interpolate(imageFloat.value, [0, 1], [0, -15]) },
-    ],
-    opacity: imageAnimation.value,
-  }));
-
+  // 제스처 핸들러: 드래그 중에는 dragX와 opacity 업데이트, 종료 시 페이드 & 스케일 전환 적용
   const panGesture = Gesture.Pan()
-    .onStart(() => {
-      dragX.value = 0;
-    })
     .onUpdate((e) => {
       dragX.value = e.translationX;
+      pageOpacity.value = interpolate(
+        Math.abs(e.translationX),
+        [0, width / 2],
+        [1, 0.7],
+        Extrapolation.CLAMP
+      );
     })
     .onEnd((e) => {
-      if (Math.abs(e.translationX) > SWIPE_THRESHOLD) {
-        // 스와이프 방향에 따라 화면을 완전히 이동시키면서 fade-out 효과 적용
-        if (e.translationX > 0) {
-          // 오른쪽 스와이프: 이전 페이지 (화면 오른쪽으로 이동)
-          dragX.value = withTiming(width, { duration: SWIPE_DURATION });
-        } else {
-          // 왼쪽 스와이프: 다음 페이지 (화면 왼쪽으로 이동)
-          dragX.value = withTiming(-width, { duration: SWIPE_DURATION });
-        }
+      const translationX = e.translationX;
+      const velocityX = e.velocityX;
+      const absTranslation = Math.abs(translationX);
+      const absVelocity = Math.abs(velocityX);
+      const shouldChangePage = absTranslation > SWIPE_THRESHOLD || absVelocity > 1000;
+      
+      if (shouldChangePage) {
+        const direction = translationX > 0 ? -1 : 1;
+        // 페이드 & 스케일 효과: 컨테이너를 약간 축소하고 불투명도를 0으로 전환
+        containerScale.value = withTiming(0.9, { duration: SWIPE_DURATION });
         pageOpacity.value = withTiming(0, { duration: SWIPE_DURATION }, () => {
-          // 애니메이션 완료 후 페이지 변경
-          if (e.translationX > 0) {
-            runOnJS(onChangePage)(-1);
-          } else {
-            runOnJS(onChangePage)(1);
-          }
-          // 새 페이지를 위해 값 초기화
+          runOnJS(onChangePage)(direction);
+          // 전환 후 새 페이지를 위해 값 초기화
           dragX.value = 0;
+          containerScale.value = 1;
           pageOpacity.value = 1;
         });
       } else {
-        // 임계치 미만이면 자연스럽게 원위치로 복귀
         dragX.value = withSpring(0, {
-          damping: 20,
-          stiffness: 200,
+          damping: 25,
+          stiffness: 250,
+          overshootClamping: true,
+        });
+        pageOpacity.value = withSpring(1, {
+          damping: 25,
+          stiffness: 250,
           overshootClamping: true,
         });
       }
     });
 
+  // 제목 애니메이션 스타일 (페이드 인 및 약간 위로 이동)
+  const titleStyle = useAnimatedStyle(() => ({
+    opacity: titleAnimation.value,
+    transform: [{ translateY: interpolate(titleAnimation.value, [0, 1], [20, 0]) }]
+  }));
+
+  // 이미지 애니메이션 스타일: 플로팅 효과만 유지
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    const floatTranslateY = interpolate(
+      imageFloat.value, 
+      [0, 0.5, 1], 
+      [0, -15, 0], 
+      Extrapolation.CLAMP
+    );
+    return {
+      transform: [{ translateY: floatTranslateY }],
+      opacity: 1,
+    };
+  });
+
+  // 페이지 컨테이너 애니메이션 스타일: dragX와 containerScale, opacity 적용
   const pageStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: dragX.value }],
+    transform: [{ translateX: dragX.value }, { scale: containerScale.value }],
     opacity: pageOpacity.value,
   }));
 
@@ -108,5 +148,6 @@ export const useStoryAnimation = (
     imageAnimatedStyle,
     panGesture,
     pageStyle,
+    resetAnimations,
   };
 };

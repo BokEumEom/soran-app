@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
+import CustomText from "@/components/common/CustomText";
 import { COLORS } from '@/constants/fairytale/colors';
 
 interface StoryContentProps {
@@ -15,9 +16,9 @@ export const StoryContent = ({ title, text, titleStyle }: StoryContentProps) => 
       <Animated.Text style={[styles.title, titleStyle]}>
         {title}
       </Animated.Text>
-      <Text style={styles.text}>
+      <CustomText style={styles.text}>
         {text}
-      </Text>
+      </CustomText>
     </View>
   );
 };

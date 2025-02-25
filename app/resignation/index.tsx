@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import CustomText from "@/components/common/CustomText";
 
 export default function ResignationHome() {
   const router = useRouter();
@@ -11,12 +12,12 @@ export default function ResignationHome() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>퇴사 고민 중이신가요?</Text>
-      <Text style={styles.subtitle}>
+      <CustomText style={styles.title}>퇴사 고민 중이신가요?</CustomText>
+      <CustomText style={styles.subtitle}>
         지금 바로 간단한 테스트를 통해 당신의 현재 상황을 분석해보세요.
-      </Text>
+      </CustomText>
       <TouchableOpacity style={styles.button} onPress={handleStartTest}>
-        <Text style={styles.buttonText}>테스트 시작하기</Text>
+        <CustomText style={styles.buttonText}>테스트 시작하기</CustomText>
       </TouchableOpacity>
     </View>
   );

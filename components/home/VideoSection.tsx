@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, Image, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, Image } from 'react-native';
+import CustomText from "@/components/common/CustomText";
 
 const messages = [
   "지금도 충분히 잘하고 있어요 🎉",
@@ -26,7 +27,7 @@ const VideoSection: React.FC = () => {
     <View style={styles.container}>
       {/* 말풍선 */}
       <View style={styles.speechBubble}>
-        <Text style={styles.speechText}>{messages[currentMessage]}</Text>
+        <CustomText style={styles.speechText}>{messages[currentMessage]}</CustomText>
       </View>
 
       {/* GIF */}
@@ -70,7 +71,6 @@ const styles = StyleSheet.create({
   gifContainer: {
     position: 'absolute',
     right: width * -0.09,
-    bottom: 3,
     zIndex: 0,
   },
   gif: {

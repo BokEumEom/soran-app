@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Image } from 'react-native';
+import { Image } from 'expo-image';
 import { Header } from '../../../components/fairytale/Header';
 import { FeaturedStory } from '../../../components/fairytale/FeaturedStory';
 import { RecentStories } from '../../../components/fairytale/RecentStories';
-import { Categories } from '../../../components/fairytale/Categories';
+import { Categories } from '@/components/fairytale/Categories';
 import { Story } from '../../../components/fairytale/types';
 import { FEATURED_STORY, RECENT_STORIES, CATEGORIES } from '../../../constants/fairytale/stories';
+import { Asset } from 'expo-asset';
+
+interface CategoryData {
+  id?: string | number;
+  title: string;
+  imageUrl: string;
+}
 
 export default function StoryHomeScreen() {
   const router = useRouter();
@@ -28,14 +35,33 @@ export default function StoryHomeScreen() {
     });
   };
 
+  const navigateToCategory = (category: CategoryData) => {
+    router.push('/fairytale/story');
+  };
+
   useEffect(() => {
     const allImages = [
       FEATURED_STORY.image,
       ...RECENT_STORIES.map(story => story.image)
     ];
 
-    Promise.all(allImages.map(imageUrl => Image.prefetch(imageUrl)))
-      .catch(error => console.warn('Image prefetch failed:', error));
+    const preloadImages = async () => {
+      try {
+        const imagePromises = allImages.map(imageUrl => {
+          if (typeof imageUrl === 'string') {
+            return Asset.fromURI(imageUrl).downloadAsync();
+          } else {
+            return Asset.fromModule(imageUrl).downloadAsync();
+          }
+        });
+        await Promise.all(imagePromises);
+        console.log('All images preloaded');
+      } catch (error) {
+        console.warn('Image prefetch failed:', error);
+      }
+    };
+
+    preloadImages();
   }, []);
 
   return (
@@ -53,7 +79,10 @@ export default function StoryHomeScreen() {
         imagesLoaded={imagesLoaded}
         onImageLoadChange={handleImageLoadChange}
       />
-      <Categories categories={CATEGORIES} />
+      <Categories 
+        categories={CATEGORIES} 
+        onCategoryPress={navigateToCategory} 
+      />
     </ScrollView>
   );
 }

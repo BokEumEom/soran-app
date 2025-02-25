@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Header } from '../../components/fairytale/Header';
 import Chart from '@/components/resignation/Chart';
 import { calculateScore, getRecommendation } from '@/utils/recommendations';
+import CustomText from "@/components/common/CustomText";
+import { Button } from '@/components/common/Button';
 
 export default function ResultScreen() {
   const router = useRouter();
@@ -18,26 +21,34 @@ export default function ResultScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>결과 분석</Text>
-      <Chart score={score} />
-      <View style={styles.card}>
-        <Text style={styles.recommendation}>{recommendation}</Text>
-      </View>
-      <TouchableOpacity
-        style={styles.primaryButton}
-        onPress={() => router.push('/resignation')}
+      <Header />
+      
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.buttonText}>다시 테스트하기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.secondaryButton}
-        onPress={() => router.push('/resignation/dashboard')}
-      >
-        <Text style={styles.secondaryButtonText}>대시보드 보기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome}>
-        <Text style={styles.secondaryButtonText}>홈 화면으로 이동</Text>
-      </TouchableOpacity>
+        <View style={styles.card}>
+          <CustomText style={styles.recommendation}>{recommendation}</CustomText>
+        </View>
+        
+        <Chart score={score} />
+        
+        <View style={styles.buttonContainer}>
+          <Button
+            title="다시 테스트하기"
+            onPress={() => router.push('/resignation')}
+            style={styles.button}
+            gradientColors={['#4A90E2', '#4A90E2']}
+          />
+          <Button
+            title="홈 화면으로 이동"
+            onPress={handleGoHome}
+            style={styles.button}
+            gradientColors={['#4A90E2', '#4A90E2']}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -45,67 +56,38 @@ export default function ResultScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
     backgroundColor: '#f9f9f9',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 30,
-    textAlign: 'center',
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 30,
   },
   card: {
     backgroundColor: '#ffffff',
-    padding: 25,
-    borderRadius: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
-    marginVertical: 20,
-    alignItems: 'center',
-    width: '90%',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    marginVertical: 10,
   },
   recommendation: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     color: '#34495E',
-    textAlign: 'center',
-    lineHeight: 26,
+    textAlign: 'left',
   },
-  primaryButton: {
-    backgroundColor: '#3498DB',
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    borderRadius: 30,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-    marginBottom: 15,
+  buttonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
   },
-  secondaryButton: {
-    backgroundColor: '#ecf0f1',
-    borderWidth: 1,
-    borderColor: '#3498DB',
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    borderRadius: 30,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  secondaryButtonText: {
-    color: '#3498DB',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+  button: {
+    width: '100%',
+    paddingVertical: 5,
+  }
 });

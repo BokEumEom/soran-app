@@ -37,12 +37,56 @@ export const RECENT_STORIES = [
     id: 3,
     title: "인어공주",
     image: "https://api.a0.dev/assets/image?text=little%20mermaid%20fairytale%20illustration%20cute%20underwater&aspect=1:1",
+  },
+  {
+    id: 4,
+    title: "신데렐라",
+    image: "https://api.a0.dev/assets/image?text=cinderella%20fairytale%20illustration%20cute%20princess%20glass%20slipper&aspect=1:1",
+  },
+  {
+    id: 5,
+    title: "잠자는 숲속의 공주",
+    image: "https://api.a0.dev/assets/image?text=sleeping%20beauty%20fairytale%20illustration%20cute%20princess%20castle&aspect=1:1",
+  },
+  {
+    id: 6,
+    title: "미녀와 야수",
+    image: "https://api.a0.dev/assets/image?text=beauty%20and%20the%20beast%20fairytale%20illustration%20cute%20castle&aspect=1:1",
+  },
+  {
+    id: 7,
+    title: "헨젤과 그레텔",
+    image: "https://api.a0.dev/assets/image?text=hansel%20and%20gretel%20fairytale%20illustration%20cute%20candy%20house&aspect=1:1",
   }
 ];
 
 export const CATEGORIES = [
-  { title: '전래동화', icon: 'book-open-variant' },
-  { title: '명작동화', icon: 'castle' },
-  { title: '창작동화', icon: 'pencil' },
-  { title: '영어동화', icon: 'translate' }
+  { 
+    title: '전래동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=traditional%20korean%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  },
+  { 
+    title: '명작동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=classic%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  },
+  { 
+    title: '창작동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=creative%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  },
+  { 
+    title: '영어동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=english%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  },
+  { 
+    title: '과학동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=science%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  },
+  { 
+    title: '동물동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=animal%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  },
+  { 
+    title: '모험동화', 
+    imageUrl: 'https://api.a0.dev/assets/image?text=adventure%20fairytales%20illustration%20colorful%20children%20book&aspect=1:1' 
+  }
 ]; 

@@ -1,7 +1,8 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
-import { Link } from "expo-router";
+import React, { useRef } from "react";
+import { View, StyleSheet, Pressable, Dimensions, Animated as RNAnimated } from "react-native";
+import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
 import { LucideProps } from "lucide-react-native";
 import CustomText from "@/components/common/CustomText";
 
@@ -22,23 +23,43 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   link,
   iconColor = "#FFFFFF",
 }) => {
-  // `link`를 올바른 `href` 형태로 변환
-  const href =
-    typeof link === "string"
-      ? link // 문자열로 전달
-      : {
-          pathname: link.pathname,
-          query: link.params || {}, // params를 query로 전달
-        };
+  const router = useRouter();
+  const scaleAnim = useRef(new RNAnimated.Value(1)).current;
+
+  const handlePressIn = () => {
+    RNAnimated.timing(scaleAnim, {
+      toValue: 0.97,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    RNAnimated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePress = () => {
+    if (typeof link === "string") {
+      router.push(link);
+    } else {
+      router.push({
+        pathname: link.pathname,
+        params: link.params,
+      });
+    }
+  };
 
   return (
-    <Link
-      href={href as any} // 타입을 강제로 맞춤
-      asChild
-    >
-      <TouchableOpacity
+    <RNAnimated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <Pressable
         style={styles.card}
-        activeOpacity={0.9}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={handlePress}
         accessibilityLabel={`${title} 카드`}
         accessibilityHint={`${subtitle} 링크로 이동합니다.`}
       >
@@ -48,6 +69,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
+          <BlurView intensity={50} tint="light" style={StyleSheet.absoluteFill} />
           <View style={styles.iconContainer}>
             <Icon size={40} color={iconColor} />
           </View>
@@ -56,8 +78,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
             <CustomText style={styles.cardSubtitle}>{subtitle}</CustomText>
           </View>
         </LinearGradient>
-      </TouchableOpacity>
-    </Link>
+      </Pressable>
+    </RNAnimated.View>
   );
 };
 
@@ -73,11 +95,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 10,
     elevation: 5,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.5)",
   },
   cardBackground: {
     flex: 1,
     padding: 15,
     justifyContent: "space-between",
+    backgroundColor: "rgba(255,255,255,0.2)",
   },
   iconContainer: {
     width: 50,

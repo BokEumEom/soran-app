@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import WeatherWidget from '@/components/weather/WeatherWidget';
 import CustomText from '@/components/common/CustomText';
 
 const ProgressSection: React.FC = () => {
@@ -26,11 +27,8 @@ const ProgressSection: React.FC = () => {
         <CustomText style={styles.progressText}>45% 완료</CustomText>
       </TouchableOpacity>
 
-      {/* 대시보드로 이동 */}
-      <TouchableOpacity style={styles.dashboardButton} onPress={navigateToDashboard}>
-        <Ionicons name="grid-outline" size={24} color="#fff" />
-        <CustomText style={styles.dashboardButtonText}>대시보드</CustomText>
-      </TouchableOpacity>
+      {/* 날씨 */}
+      <WeatherWidget />
     </View>
   );
 };
@@ -67,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#4A4A4A',
     marginTop: 3,
+    right: -120
   },
   dashboardButton: {
     flex: 1,

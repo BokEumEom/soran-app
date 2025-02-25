@@ -1,67 +1,68 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Category } from './types';
+import { View, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
+import CustomText from "@/components/common/CustomText";
 
-const { width } = Dimensions.get('window');
+// Get screen dimensions
+const { width, height } = Dimensions.get('window');
 
-interface CategoriesProps {
-  categories: Category[];
+// Update the interface to match the actual data structure
+interface CategoryData {
+  id?: string | number;
+  title: string;
+  imageUrl: string;
 }
 
-export const Categories = ({ categories }: CategoriesProps) => (
+interface CategoriesProps {
+  categories: CategoryData[];
+  onCategoryPress: (category: CategoryData) => void;
+}
+
+export const Categories = ({ categories, onCategoryPress }: CategoriesProps) => (
   <View style={styles.categoriesContainer}>
-    <Text style={styles.sectionTitle}>동화 카테고리</Text>
-    <View style={styles.categoryGrid}>
+    <CustomText style={styles.sectionTitle}>동화 카테고리</CustomText>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {categories.map((category, index) => (
-        <TouchableOpacity key={index} style={styles.categoryCard}>
-          <MaterialCommunityIcons 
-            name={category.icon}
-            size={28} 
-            color="#FF6B6B" 
+        <TouchableOpacity 
+          key={index} 
+          style={styles.categoryCard}
+          onPress={() => onCategoryPress(category)}
+        >
+          <Image 
+            source={{ uri: category.imageUrl }}
+            style={styles.categoryImage}
+            resizeMode="cover"
           />
-          <Text style={styles.categoryTitle}>{category.title}</Text>
+          <CustomText style={styles.categoryTitle}>{category.title}</CustomText>
         </TouchableOpacity>
       ))}
-    </View>
+    </ScrollView>
   </View>
 );
 
 const styles = StyleSheet.create({
   categoriesContainer: {
-    padding: 20,
-    paddingBottom: 32,
+    paddingHorizontal: 15,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: width * 0.05,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: width * 0.04,
     color: '#444',
-  },
-  categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
   },
   categoryCard: {
-    width: (width - 60) / 2,
-    height: 100,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    marginBottom: 16,
-    padding: 16,
+    marginLeft: 8,
     alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+  },
+  categoryImage: {
+    width: width * 0.26,
+    height: height * 0.17,
+    borderRadius: width * 0.04,
   },
   categoryTitle: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     fontWeight: '600',
-    marginTop: 8,
-    color: '#444',
+    padding: width * 0.03,
+    color: '#333',
+    textAlign: 'center',
   },
 }); 

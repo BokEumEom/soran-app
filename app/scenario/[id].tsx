@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Header } from '../../components/fairytale/Header';
 import { scenarios } from '../../constants/scenarios';
 import { useEmotionContext } from '../../contexts/EmotionContext';
 import { EmotionBar } from '../../components/scenario/EmotionBar';
 import { Character } from '../../components/scenario/Character';
-import { Header } from '../../components/common/Header';
 import { ProgressBar } from '../../components/common/ProgressBar';
+import CustomText from "@/components/common/CustomText";
 
 const StoryScreen = () => {
   const router = useRouter();
@@ -69,29 +70,28 @@ const StoryScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="스토리 진행" showBackButton={true} />
-      
-      <Character />
-      <EmotionBar />
-      
+      <Header />
+      {/* ProgressBar 컴포넌트 추가 */}
+      <View style={styles.progressContainer}>
+        <ProgressBar progress={progress} />
+        <CustomText style={styles.progressText}>{`진행률: ${Math.round(progress)}%`}</CustomText>
+      </View>
+
       <ScrollView style={styles.storyContainer}>
-        <Text style={styles.storyText}>{currentChapter.text}</Text>
+      <EmotionBar />
+        <Character />
+        
+        <CustomText style={styles.storyText}>{currentChapter.text}</CustomText>
         {currentChapter.choices.map((choice) => (
           <TouchableOpacity
             key={choice.id}
             style={styles.choiceButton}
             onPress={() => handleChoiceSelect(choice)}
           >
-            <Text style={styles.choiceText}>{choice.text}</Text>
+            <CustomText style={styles.choiceText}>{choice.text}</CustomText>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {/* ProgressBar 컴포넌트 추가 */}
-      <View style={styles.progressContainer}>
-        <ProgressBar progress={progress} />
-        <Text style={styles.progressText}>{`진행률: ${Math.round(progress)}%`}</Text>
-      </View>
+        ))} 
+      </ScrollView>  
     </View>
   );
 };
@@ -100,33 +100,34 @@ export default StoryScreen;
 
 const styles = StyleSheet.create({
   container: { 
-    flex: 1,
-    padding: 10,  
+    flex: 1, 
     backgroundColor: '#F1FAEE',
   },
   storyContainer: { 
-    padding: 10, 
+    padding: 10,
   },
   storyText: {
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: '600',
     color: '#1D3557',
-    marginBottom: 30,
+    marginBottom: 10,
+    marginTop: 10,
     textAlign: 'justify',
   },
   choiceButton: {
     backgroundColor: '#A8DADC',
     padding: 15,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   choiceText: { 
     color: '#1D3557', 
-    fontSize: 18, 
+    fontSize: 16, 
     textAlign: 'center',
     fontWeight: '600',
   },
   progressContainer: {
-    marginBottom: 20,
+    padding: 10
   },
   progressText: {
     fontSize: 14,

@@ -1,8 +1,8 @@
 // components/emotions/EmotionsSelector.tsx
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SmilePlus, Frown, Angry, Skull, HelpCircle, Meh } from 'lucide-react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -26,12 +26,12 @@ const GRADIENT_BORDER_RADIUS = 15;
 const GRADIENT_PADDING = 20;
 
 type EmotionIconName =
-  | 'emoticon-happy-outline'
-  | 'emoticon-cry-outline'
-  | 'emoticon-angry-outline'
-  | 'emoticon-dead-outline'
-  | 'emoticon-confused-outline'
-  | 'emoticon-neutral-outline';
+  | 'smile-plus'
+  | 'frown'
+  | 'angry'
+  | 'siren'
+  | 'help-circle'
+  | 'meh';
 
 type Emotion = {
   title: string;
@@ -46,42 +46,42 @@ const emotions: Emotion[] = [
     title: '긍정적 감정',
     description: '현재 기분이 긍정적이에요.',
     colors: ['#FFE082', '#FFD54F'],
-    icon: 'emoticon-happy-outline',
+    icon: 'smile-plus',
     route: '/emotions/positiveEmotions',
   },
   {
     title: '슬픔/우울감',
     description: '현재 기분이 우울해요.',
     colors: ['#90CAF9', '#64B5F6'],
-    icon: 'emoticon-cry-outline',
+    icon: 'frown',
     route: '/emotions/sadness',
   },
   {
     title: '분노/짜증',
     description: '현재 기분이 화가 나요.',
     colors: ['#EF9A9A', '#E57373'],
-    icon: 'emoticon-angry-outline',
+    icon: 'angry',
     route: '/emotions/anger',
   },
   {
     title: '스트레스/압박감',
     description: '현재 스트레스를 받고 있어요.',
     colors: ['#FFCC80', '#FFB74D'],
-    icon: 'emoticon-dead-outline',
+    icon: 'siren',
     route: '/emotions/stress',
   },
   {
     title: '불안/불확실감',
     description: '현재 기분이 불안해요.',
     colors: ['#B39DDB', '#9575CD'],
-    icon: 'emoticon-confused-outline',
+    icon: 'help-circle',
     route: '/emotions/anxiety',
   },
   {
     title: '무관심/흥미 상실',
     description: '현재 아무런 흥미를 느끼지 않아요.',
     colors: ['#CFD8DC', '#B0BEC5'],
-    icon: 'emoticon-neutral-outline',
+    icon: 'meh',
     route: '/emotions/apathy',
   },
 ];
@@ -155,11 +155,12 @@ export default function EmotionsSlider() {
             >
               <CustomText style={styles.title}>오늘의 감정 상태는?</CustomText>
               <View style={styles.iconContainer}>
-                <MaterialCommunityIcons
-                  name={emotion.icon}
-                  size={ICON_SIZE}
-                  color="#FFF"
-                />
+                {emotion.icon === 'smile-plus' && <SmilePlus size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'frown' && <Frown size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'angry' && <Angry size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'skull' && <Skull size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'help-circle' && <HelpCircle size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'meh' && <Meh size={ICON_SIZE} color="#FFF" />}
               </View>
               <CustomText style={styles.description}>
                 {emotion.description}
