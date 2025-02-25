@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Header } from '@/components/common/Header';
+import { Header } from '../../../components/fairytale/Header';
 import { Ionicons } from '@expo/vector-icons';
 import CustomText from '@/components/common/CustomText';
 import songs from '@/constants/songs';
@@ -39,7 +39,7 @@ const MusicChangeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="음악 변경" showBackButton onBackPress={handleBackPress} />
+      <Header />
       <FlatList
         data={songs}
         keyExtractor={(item) => item.name}

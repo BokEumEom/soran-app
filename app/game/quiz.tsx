@@ -1,7 +1,6 @@
 // app/game/quiz.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import { Header } from '@/components/common/Header';
 import { useChatQuiz } from '@/hooks/useChatQuiz';
 import ChatMessage from '@/components/quiz/ChatMessage';
 import OptionButton from '@/components/quiz/OptionButton';
@@ -42,8 +41,6 @@ const QuizGame = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Quiz Game" showBackButton titleColor="#000" />
-
       <View style={styles.content}>
         <FlatList
           ref={flatListRef}
@@ -100,12 +97,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F6FA',
-    padding: 10,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingHorizontal: 10,
+    paddingVertical: 50,
     alignItems: 'center',
   },
   chatList: {
@@ -127,7 +123,7 @@ const styles = StyleSheet.create({
   },
   statsPanelWrapper: {
     position: 'absolute',
-    top: 80,
+    top: 50,
     right: 10,
     zIndex: 999,
   },

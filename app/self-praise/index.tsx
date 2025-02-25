@@ -1,6 +1,7 @@
 // app/self-praise/index.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Header } from '../../components/fairytale/Header';
 import ComplimentCard from '../../components/self-praise/ComplimentCard';
 import compliments from '../../constants/self-praise/compliments';
 import characters from '../../constants/self-praise/characters';
@@ -25,6 +26,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Header />
       <View style={styles.content}>
         <ComplimentCard
           message={compliment}
@@ -42,8 +44,6 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 70,
-    alignItems: 'center',
     backgroundColor: '#fff5e6',
   },
   content: {

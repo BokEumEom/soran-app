@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { Header } from '../../components/fairytale/Header';
 import Tabs from '@/components/common/Tabs'; // Tabs component
 import { BarChart, LineChart } from 'react-native-chart-kit';
 import RadarChart from '@/components/resignation/RadarChart';
@@ -76,7 +77,8 @@ const DashboardScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <Header />
       <Tabs
         data={[
           { icon: 'Radar', label: 'Radar Chart' },
@@ -94,7 +96,7 @@ const DashboardScreen = () => {
       >
         {renderContent()}
       </Animated.View>
-    </SafeAreaView>
+    </View>
   );
 };
 

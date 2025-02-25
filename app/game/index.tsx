@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Header } from '@/components/common/Header';
+import { Header } from '../../components/fairytale/Header';
 import CustomText from '@/components/common/CustomText';
 import { LinearGradient } from 'expo-linear-gradient';
-import { gameOptions, CARD_WIDTH, CARD_HEIGHT } from '@/constants/gameConstants';
+import { gameOptions, CARD_WIDTH, CARD_HEIGHT } from '../../constants/gameConstants';
 
 export default function GameSelectionScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Header title="Choose Your Game" showBackButton titleColor="#000" />
+      <Header />
       <FlatList
         data={gameOptions}
         keyExtractor={(item) => item.route}

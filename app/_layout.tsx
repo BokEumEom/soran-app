@@ -24,37 +24,12 @@ export default function RootLayout() {
 
   // useFonts 훅을 사용하여 폰트를 로드
   const [fontsLoaded] = useFonts({
-    DepartureMono: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/DepartureMono-Regular.otf',
-    },
-    NanumSquareNeo: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/NanumSquareNeo-eHv.ttf',
-    },
-    NEXONLv2Gothic: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/NEXON%20Lv2%20Gothic%20Medium.ttf',
-    },
-    NotoSansKR: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/NotoSansKR-Medium.ttf',
-    },
-    Orbitron: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/Orbitron-VariableFont-wght.ttf',
-    },
-    PressStart2P: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/PressStart2P-Regular.ttf',
-    },
-    RobotoMono: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/RobotoMono-Regular.ttf',
-    },
-    SpaceMono: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/SpaceMono-Regular.ttf',
-    },
-    SpoqaHanSansNeo: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/fonts/SpoqaHanSansNeo-Medium.ttf',
-    },
-    // 추가: HSYuji-Regular 폰트 (woff 형식)
-    'HSYuji-Regular': {
-      uri: 'https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff',
-    },
+    DepartureMono: require('../assets/fonts/DepartureMono-Regular.otf'),
+    Ownglyph_corncorn: require('../assets/fonts/Ownglyph_corncorn-Rg.ttf'),
+    CookieRun_Regular: require('../assets/fonts/CookieRun_Regular.ttf'),
+    SBAggroB: require('../assets/fonts/SBAggroB.ttf'),
+    DungGeunMo: require('../assets/fonts/DungGeunMo.ttf'),
+    NoonnuBasicGothic: require('../assets/fonts/NoonnuBasicGothic.ttf'),
   });
 
   // 폰트 로딩 완료 시 스플래시 화면 숨김 및 /onboarding으로 리디렉션

@@ -41,7 +41,7 @@ export default ChatMessage;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 20,
     marginVertical: 5,
     borderRadius: 10,
   },

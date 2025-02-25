@@ -101,7 +101,7 @@ export default function TabLayout() {
         options={{
           title: '동화',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'book-sharp' : 'book-outline'} color={color} />
+            <TabBarIcon name={focused ? 'library-sharp' : 'library-outline'} color={color} />
           ),
         }}
       />
@@ -110,7 +110,7 @@ export default function TabLayout() {
         options={{
           title: '대시보드',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'bar-chart-sharp' : 'bar-chart-outline'} color={color} />
+            <TabBarIcon name={focused ? 'pie-chart-sharp' : 'pie-chart-outline'} color={color} />
           ),
         }}
       />

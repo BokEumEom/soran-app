@@ -6,6 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useComplimentAnimation } from '../../hooks/useComplimentAnimation';
+import { useAnimatedGradient } from '../../hooks/useAnimatedGradient';
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -75,9 +76,8 @@ const ComplimentCard: React.FC<ComplimentCardProps> = ({
     opacity: messageTextOpacity.value,
   }));
 
-  const animatedGradientStyle = useAnimatedStyle(() => ({
-    opacity: bubbleOpacity.value, // 그라디언트와 말풍선 동기화
-  }));
+  // 그라데이션을 위한 커스텀 훅 사용
+  const { animatedProps } = useAnimatedGradient(gradientOpacity);
 
   // 파티클 애니메이션 스타일
   const animatedParticleStyles = particleY.map((y, i) =>
@@ -113,19 +113,18 @@ const ComplimentCard: React.FC<ComplimentCardProps> = ({
           <AnimatedView key={index} style={[styles.particle, style]} />
         ))}
       </View>
-      <AnimatedLinearGradient
-        colors={[
-          interpolateColor(gradientOpacity.value, [0, 1], ['#fff5cc', '#ffeb99']),
-          interpolateColor(gradientOpacity.value, [0, 1], ['#ffeb99', '#ffe680']),
-        ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.messageBox, animatedBubbleStyle, animatedGradientStyle]}
-      >
-        <Animated.Text style={[styles.messageText, animatedMessageTextStyle]}>
-          {message}
-        </Animated.Text>
-      </AnimatedLinearGradient>
+      <Animated.View style={[styles.messageBoxContainer, animatedBubbleStyle]}>
+        <AnimatedLinearGradient
+          animatedProps={animatedProps}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.messageBox}
+        >
+          <Animated.Text style={[styles.messageText, animatedMessageTextStyle]}>
+            {message}
+          </Animated.Text>
+        </AnimatedLinearGradient>
+      </Animated.View>
     </View>
   );
 };
@@ -148,11 +147,14 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
+  messageBoxContainer: {
+    width: '95%',
+    alignSelf: 'center',
+  },
   messageBox: {
     borderRadius: 15,
     padding: SCREEN_WIDTH * 0.05,
-    width: '95%',
-    alignSelf: 'center',
+    width: '100%',
     elevation: 5,
   },
   messageText: {

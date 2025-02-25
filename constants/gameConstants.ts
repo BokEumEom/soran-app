@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 import { Dices } from 'lucide-react-native';
-import { GameOption } from '../../types/game/types';
+import { GameOption } from '../types/game/types';
 
 const { width } = Dimensions.get('window');
 export const CARD_WIDTH = width * 0.45;

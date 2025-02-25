@@ -3,7 +3,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { Header } from '@/components/common/Header';
+import { Header } from '../../../components/fairytale/Header';
 import { Ionicons } from '@expo/vector-icons';
 import CustomText from '@/components/common/CustomText';
 import { useFontSettingsContext } from '@/contexts/FontSettingsContext';
@@ -14,8 +14,7 @@ const FontSelectionScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="폰트 변경" showBackButton={true} titleColor="#333333" />
-
+      <Header />
       <View style={styles.tipContainer}>
         <CustomText style={styles.tipText}>폰트 사이즈와 종류를 변경할 수 있어요.</CustomText>
         <CustomText style={styles.tipDescription}>
@@ -60,13 +59,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
   },
   tipContainer: {
     backgroundColor: '#F5F5F5',
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
     marginVertical: 10,
+    paddingHorizontal: 20,
   },
   tipText: {
     fontSize: 16,
@@ -83,6 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: 20,
+    paddingHorizontal: 20,
   },
   slider: {
     flex: 1,
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
   fontList: {
     paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   fontItem: {
     flexDirection: 'row',

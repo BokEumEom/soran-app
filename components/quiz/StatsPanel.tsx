@@ -52,30 +52,28 @@ const StatsPanel: React.FC<StatsPanelProps> = ({ stats, score, skills }) => {
       </TouchableOpacity>
 
       {/* 펼쳐진 내용 */}
-      {isExpanded && (
-        <View style={styles.content}>
-          {/* 주요 스탯 */}
-          {Object.entries(stats).map(([stat, value]) => (
-            <View key={stat} style={styles.statContainer}>
-              <Text style={styles.statName}>{stat}</Text>
-              <View style={styles.statBar}>
-                <View style={[styles.statFill, { width: `${value}%` }]} />
-              </View>
+      <View style={[styles.content, { opacity: isExpanded ? 1 : 0 }]}>
+        {/* 주요 스탯 */}
+        {Object.entries(stats).map(([stat, value]) => (
+          <View key={stat} style={styles.statContainer}>
+            <Text style={styles.statName}>{stat}</Text>
+            <View style={styles.statBar}>
+              <View style={[styles.statFill, { width: `${value}%` }]} />
+            </View>
+          </View>
+        ))}
+
+        {/* 스킬 레벨 */}
+        <View style={styles.skillsContainer}>
+          <Text style={styles.skillsHeader}>스킬 레벨</Text>
+          {Object.entries(skills).map(([skill, level]) => (
+            <View key={skill} style={styles.skillItem}>
+              <Text style={styles.skillName}>{skill}</Text>
+              <Text style={styles.skillLevel}>Lv {level}</Text>
             </View>
           ))}
-
-          {/* 스킬 레벨 */}
-          <View style={styles.skillsContainer}>
-            <Text style={styles.skillsHeader}>스킬 레벨</Text>
-            {Object.entries(skills).map(([skill, level]) => (
-              <View key={skill} style={styles.skillItem}>
-                <Text style={styles.skillName}>{skill}</Text>
-                <Text style={styles.skillLevel}>Lv {level}</Text>
-              </View>
-            ))}
-          </View>
         </View>
-      )}
+      </View>
     </Animated.View>
   );
 };

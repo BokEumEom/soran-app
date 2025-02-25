@@ -2,7 +2,7 @@ import React from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { scenarios } from '../../constants/scenarios';
 import { useRouter } from 'expo-router';
-import { Header } from '../../components/common/Header'; // Header 컴포넌트
+import { Header } from '../../components/fairytale/Header';
 import { FontAwesome } from '@expo/vector-icons'; // AntDesign 아이콘 대신 FontAwesome 사용
 
 const ScenarioListScreen = () => {
@@ -29,7 +29,7 @@ const ScenarioListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="시나리오 리스트" showBackButton={true} titleColor="#000" /> 
+      <Header />
       <FlatList
         data={scenarios}
         keyExtractor={(item) => item.id.toString()}
