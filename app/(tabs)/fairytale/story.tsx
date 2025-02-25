@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Image, Dimensions, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated from 'react-native-reanimated';
 import { Header } from '@/components/fairytale/Header';
@@ -10,81 +10,20 @@ import { useStoryAnimation } from '@/hooks/useStoryAnimation';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { COLORS } from '@/constants/fairytale/colors';
 import { storyPages } from '@/constants/fairytale/stories';
-import { useLocalSearchParams, Stack } from 'expo-router';
-import VideoPlayer from '@/components/fairytale/VideoPlayer';
-import CustomText from '@/components/common/CustomText';
-import { Asset } from 'expo-asset';
 
 const { width, height } = Dimensions.get('window');
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-// 비디오 파일 매핑
-const videoMapping: Record<string, any> = {
-  '1': require('@/assets/video/fairytale1.mov'),
-  '2': require('@/assets/video/fairytale2.mov'),
-  '3': require('@/assets/video/fairytale3.mov'),
-  // 필요한 만큼 비디오 파일 추가
-};
-
-const StoryScreen = () => {
-  const params = useLocalSearchParams();
-  const id = params.id as string;
-  const title = params.title as string;
-  
-  const [videoUri, setVideoUri] = useState<string | null>(null);
-  
-  useEffect(() => {
-    const loadVideo = async () => {
-      try {
-        // id에 해당하는 비디오 파일이 있는지 확인
-        if (id && videoMapping[id]) {
-          // 로컬 asset을 URI로 변환
-          const asset = Asset.fromModule(videoMapping[id]);
-          await asset.downloadAsync();
-          setVideoUri(asset.localUri || asset.uri);
-        } else {
-          // 기본 비디오 파일 사용
-          const defaultVideo = require('@/assets/video/default.mov');
-          const asset = Asset.fromModule(defaultVideo);
-          await asset.downloadAsync();
-          setVideoUri(asset.localUri || asset.uri);
-        }
-      } catch (error) {
-        console.error('비디오 로딩 오류:', error);
-      }
-    };
-    
-    loadVideo();
-  }, [id]);
-  
-  const storyTitle = title || '전래동화 제목';
-
+export default function StoryDetailScreen() {
   const [currentPage, setCurrentPage] = useState(0);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
 
   const currentStory = storyPages[currentPage];
   if (!currentStory) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Stack.Screen options={{ title: storyTitle }} />
-        
-        {videoUri ? (
-          <VideoPlayer 
-            videoUri={videoUri}
-            title={storyTitle}
-          />
-        ) : (
-          <View style={styles.loadingContainer}>
-            <CustomText>비디오 로딩 중...</CustomText>
-          </View>
-        )}
-        
-        <View style={styles.descriptionContainer}>
-          <CustomText style={styles.descriptionText}>
-            이 전래동화는 한국의 전통적인 이야기로, 아이들에게 교훈을 전달합니다.
-          </CustomText>
-        </View>
-      </SafeAreaView>
+      <View style={styles.container}>
+        <Header />
+      </View>
     );
   }
 
@@ -121,67 +60,46 @@ const StoryScreen = () => {
   }, [currentPage]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Stack.Screen options={{ title: storyTitle }} />
-      
-      {videoUri ? (
-        <VideoPlayer 
-          videoUri={videoUri}
-          title={storyTitle}
-        />
-      ) : (
-        <View style={styles.loadingContainer}>
-          <CustomText>비디오 로딩 중...</CustomText>
-        </View>
-      )}
-      
-      <View style={styles.descriptionContainer}>
-        <CustomText style={styles.descriptionText}>
-          이 전래동화는 한국의 전통적인 이야기로, 아이들에게 교훈을 전달합니다.
-        </CustomText>
-      </View>
-      
-      <View style={styles.container}>
-        <Header />
-        <LinearGradient colors={COLORS.background} style={styles.background}>
-          {backgroundImage && (
-            <Animated.Image
-              source={{ uri: backgroundImage }}
-              style={[StyleSheet.absoluteFillObject, styles.backgroundImage]}
-              blurRadius={30}
+    <View style={styles.container}>
+      <Header />
+      <LinearGradient colors={COLORS.background} style={styles.background}>
+        {backgroundImage && (
+          <Animated.Image
+            source={{ uri: backgroundImage }}
+            style={[StyleSheet.absoluteFillObject, styles.backgroundImage]}
+            blurRadius={30}
+          />
+        )}
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.pageContainer, pageStyle]}>
+            <AnimatedImage
+              source={{ uri: currentStory.image }}
+              style={[styles.storyImage, imageAnimatedStyle]}
+              onLoadStart={() => handleLoadChange(currentPage, false)}
+              onLoadEnd={() => handleLoadChange(currentPage, true)}
+              onError={(e) => {
+                console.log('Image load error:', e.nativeEvent.error);
+                handleLoadChange(currentPage, true);
+              }}
             />
-          )}
-          <GestureDetector gesture={panGesture}>
-            <Animated.View style={[styles.pageContainer, pageStyle]}>
-              <AnimatedImage
-                source={{ uri: currentStory.image }}
-                style={[styles.storyImage, imageAnimatedStyle]}
-                onLoadStart={() => handleLoadChange(currentPage, false)}
-                onLoadEnd={() => handleLoadChange(currentPage, true)}
-                onError={(e) => {
-                  console.log('Image load error:', e.nativeEvent.error);
-                  handleLoadChange(currentPage, true);
-                }}
-              />
-              <StoryContent
-                title={currentStory.title}
-                text={currentStory.text}
-                titleStyle={titleStyle}
-              />
-              <PageNavigation
-                currentPage={currentPage}
-                totalPages={storyPages.length}
-                onChangePage={changePage}
-              />
-              <ProgressDots
-                currentPage={currentPage}
-                totalPages={storyPages.length}
-              />
-            </Animated.View>
-          </GestureDetector>
-        </LinearGradient>
-      </View>
-    </SafeAreaView>
+            <StoryContent
+              title={currentStory.title}
+              text={currentStory.text}
+              titleStyle={titleStyle}
+            />
+            <PageNavigation
+              currentPage={currentPage}
+              totalPages={storyPages.length}
+              onChangePage={changePage}
+            />
+            <ProgressDots
+              currentPage={currentPage}
+              totalPages={storyPages.length}
+            />
+          </Animated.View>
+        </GestureDetector>
+      </LinearGradient>
+    </View>
   );
 }
 
@@ -207,19 +125,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   backgroundImage: { opacity: 0.5 },
-  descriptionContainer: {
-    padding: 16,
-  },
-  descriptionText: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#333',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
-
-export default StoryScreen;
