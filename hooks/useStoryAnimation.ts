@@ -12,25 +12,31 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture } from 'react-native-gesture-handler';
 
-const SWIPE_THRESHOLD = Dimensions.get('window').width * 0.3;
+const { width } = Dimensions.get('window');
+const SWIPE_THRESHOLD = width * 0.25;
+const SWIPE_DURATION = 250;
 
 export const useStoryAnimation = (
   currentPage: number, 
   onChangePage: (direction: number) => void
 ) => {
+  // 기본 애니메이션 공유값
   const titleAnimation = useSharedValue(0);
   const imageAnimation = useSharedValue(0);
   const imageFloat = useSharedValue(0);
   const dragX = useSharedValue(0);
+  const pageOpacity = useSharedValue(1);
 
   useEffect(() => {
+    // 페이지 전환 시 초기화
     titleAnimation.value = 0;
     imageAnimation.value = 0;
     imageFloat.value = 0;
+    pageOpacity.value = 1;
 
-    titleAnimation.value = withTiming(1, { duration: 1000 });
-    imageAnimation.value = withTiming(1, { duration: 1000 });
-    imageFloat.value = withTiming(1, { duration: 1000 });
+    titleAnimation.value = withTiming(1, { duration: 500 });
+    imageAnimation.value = withTiming(1, { duration: 500 });
+    imageFloat.value = withTiming(1, { duration: 500 });
 
     return () => {
       cancelAnimation(titleAnimation);
@@ -54,7 +60,6 @@ export const useStoryAnimation = (
     opacity: imageAnimation.value,
   }));
 
-  // 새로운 제스처 API (Gesture.Pan 사용)
   const panGesture = Gesture.Pan()
     .onStart(() => {
       dragX.value = 0;
@@ -64,22 +69,38 @@ export const useStoryAnimation = (
     })
     .onEnd((e) => {
       if (Math.abs(e.translationX) > SWIPE_THRESHOLD) {
+        // 스와이프 방향에 따라 화면을 완전히 이동시키면서 fade-out 효과 적용
         if (e.translationX > 0) {
-          runOnJS(onChangePage)(-1);
+          // 오른쪽 스와이프: 이전 페이지 (화면 오른쪽으로 이동)
+          dragX.value = withTiming(width, { duration: SWIPE_DURATION });
         } else {
-          runOnJS(onChangePage)(1);
+          // 왼쪽 스와이프: 다음 페이지 (화면 왼쪽으로 이동)
+          dragX.value = withTiming(-width, { duration: SWIPE_DURATION });
         }
+        pageOpacity.value = withTiming(0, { duration: SWIPE_DURATION }, () => {
+          // 애니메이션 완료 후 페이지 변경
+          if (e.translationX > 0) {
+            runOnJS(onChangePage)(-1);
+          } else {
+            runOnJS(onChangePage)(1);
+          }
+          // 새 페이지를 위해 값 초기화
+          dragX.value = 0;
+          pageOpacity.value = 1;
+        });
+      } else {
+        // 임계치 미만이면 자연스럽게 원위치로 복귀
+        dragX.value = withSpring(0, {
+          damping: 20,
+          stiffness: 200,
+          overshootClamping: true,
+        });
       }
-      // withSpring 옵션 조정: overshootClamping을 true로 하여 튀는 현상 제거
-      dragX.value = withSpring(0, {
-        damping: 15,
-        stiffness: 200,
-        overshootClamping: true,
-      });
     });
 
   const pageStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: dragX.value }],
+    opacity: pageOpacity.value,
   }));
 
   return {
