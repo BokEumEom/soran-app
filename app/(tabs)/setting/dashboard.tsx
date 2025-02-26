@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { Header } from '../../components/fairytale/Header';
+import { Header } from '../../../components/fairytale/Header';
 import Tabs from '@/components/common/Tabs'; // Tabs component
 import { BarChart, LineChart } from 'react-native-chart-kit';
 import RadarChart from '@/components/resignation/RadarChart';

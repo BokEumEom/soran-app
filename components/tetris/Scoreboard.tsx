@@ -1,7 +1,8 @@
 // components/tetris/Scoreboard.tsx
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // 아이콘 사용을 위해 설치 필요
+// import { FontAwesome } from '@expo/vector-icons'; // 아이콘 사용을 위해 설치 필요
+import { Star, Trophy } from 'lucide-react-native'; // lucide-react-native 아이콘 사용
 
 const { width } = Dimensions.get('window'); // 화면 크기를 가져옴
 
@@ -14,11 +15,11 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ score, level }) => {
   return (
     <View style={styles.container}>
       <View style={styles.scoreItem}>
-        <FontAwesome name="star" size={width * 0.05} color="#FFFFFF" style={styles.icon} />
+        <Star size={width * 0.05} color="#FFFFFF" style={styles.icon} />
         <Text style={styles.text}>{score.toLocaleString()}</Text>
       </View>
       <View style={styles.scoreItem}>
-        <FontAwesome name="trophy" size={width * 0.05} color="#FFFFFF" style={styles.icon} />
+        <Trophy size={width * 0.05} color="#FFFFFF" style={styles.icon} />
         <Text style={styles.text}>{level.toLocaleString()}</Text>
       </View>
     </View>

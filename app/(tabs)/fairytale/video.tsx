@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
-import { useLocalSearchParams, Stack } from 'expo-router';
+import { useLocalSearchParams, Stack, Route } from 'expo-router';
 import { Asset } from 'expo-asset';
-import { useVideoPlayer, VideoView, VideoSource } from 'expo-video';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEvent } from 'expo';
 import CustomText from '@/components/common/CustomText';
 import { PlayCircle, PauseCircle } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
 
-interface VideoScreenParams {
+type VideoScreenParams = {
   videoId: string;
   title?: string;
-}
+};
 
 // 로컬 비디오 매핑 (파일 경로를 실제 위치에 맞게 수정)
 const videoMapping: Record<string, any> = {

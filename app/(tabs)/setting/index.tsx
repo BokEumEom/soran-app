@@ -56,8 +56,8 @@ const SettingsScreen = () => {
         onPress={() => router.push('/setting/wallpaper')} 
       />
       <NavigationSettingItem 
-        label="VerticalList 구현" 
-        onPress={() => router.push('/setting/animations')} 
+        label="대시보드 구현" 
+        onPress={() => router.push('/setting/dashboard')} 
       />
 
       <VersionInfo />

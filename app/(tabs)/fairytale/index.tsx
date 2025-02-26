@@ -78,7 +78,7 @@ export default function StoryHomeScreen() {
 
   return (
     <View style={styles.container}>
-    <Header />
+      <Header />
       <ScrollView style={styles.scrollcontainer}>
         <FeaturedStory
           story={FEATURED_STORY}

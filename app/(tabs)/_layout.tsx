@@ -106,15 +106,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="dashboard"
-        options={{
-          title: '대시보드',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'pie-chart-sharp' : 'pie-chart-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="setting"
         options={{
           title: '세팅',

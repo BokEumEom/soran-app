@@ -3,57 +3,14 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button } from '../common/Button';
 import CustomText from '@/components/common/CustomText';
+import { emotionStates } from '@/constants/emotions/emotionStates';
+import { Indicator } from './Indicator';
 
 type QuestionSectionProps = {
   section: { title: string; questions: string[]; conclusions: any };
   onNext: (answers: boolean[]) => void;
   emotionKey: string; // EmotionsFlow에서 전달받는 감정 키
 };
-
-const emotionStates = [
-  {
-    key: 'positiveEmotions',
-    title: '긍정적 감정',
-    icon: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/emotions/mint-bear-character.webp',
-    },
-  },
-  {
-    key: 'sadness',
-    title: '슬픔/우울감',
-    icon: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/emotions/mint-bear-struggling.webp',
-    },
-  },
-  {
-    key: 'anger',
-    title: '분노/짜증',
-    icon: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/emotions/two-chibi-characters.webp',
-    },
-  },
-  {
-    key: 'stress',
-    title: '스트레스',
-    icon: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/emotions/mint-bear-cleansing-balm.webp',
-    },
-  },
-  {
-    key: 'anxiety',
-    title: '불안/불확실감',
-    icon: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/emotions/mint-bear-character-balance.webp',
-    },
-  },
-  {
-    key: 'apathy',
-    title: '무관심/흥미상실',
-    icon: {
-      uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/emotions/mint-colored-bear-character.webp',
-    },
-  },
-];
 
 export default function QuestionSection({ section, onNext, emotionKey }: QuestionSectionProps) {
   const [answers, setAnswers] = useState<boolean[]>([]);
@@ -74,29 +31,48 @@ export default function QuestionSection({ section, onNext, emotionKey }: Questio
 
   return (
     <ImageBackground
-      source={selectedEmotion ? selectedEmotion.icon : null} 
+      source={selectedEmotion ? selectedEmotion.icon : undefined} 
       style={styles.background}
       resizeMode="cover"
     >
       <View style={styles.container}>
-        <CustomText style={styles.title}>{section.title}</CustomText>
-        <CustomText style={styles.question}>{section.questions[currentQuestion]}</CustomText>
+        <Indicator 
+          total={section.questions.length} 
+          selectedIndex={currentQuestion}
+          activeColor="#FF9800"
+          inactiveColor="rgba(255, 255, 255, 0.5)"
+        />
         
-        <Button
-          title="Yes"
-          onPress={() => handleAnswer(true)}
-          gradientColors={['#4CAF50', '#66BB6A']}
-          style={styles.button}
-          textStyle={styles.buttonText}
-        />
+        <CustomText style={styles.title}>{section.title}</CustomText>
+        <View style={styles.questionContainer}>
+          <CustomText style={styles.question}>{section.questions[currentQuestion]}</CustomText>
+          
+          <View style={styles.questionNumberBadge}>
+            <CustomText style={styles.questionNumberText}>
+              {currentQuestion + 1}/{section.questions.length}
+            </CustomText>
+          </View>
+        </View>
+        
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Yes"
+            onPress={() => handleAnswer(true)}
+            gradientColors={['#4CAF50', '#66BB6A']}
+            style={styles.button}
+            textStyle={styles.buttonText}
+            icon="check-circle"
+          />
 
-        <Button
-          title="No"
-          onPress={() => handleAnswer(false)}
-          gradientColors={['#F44336', '#EF5350']}
-          style={styles.button}
-          textStyle={styles.buttonText}
-        />
+          <Button
+            title="No"
+            onPress={() => handleAnswer(false)}
+            gradientColors={['#F44336', '#EF5350']}
+            style={styles.button}
+            textStyle={styles.buttonText}
+            icon="times-circle"
+          />
+        </View>
       </View>
     </ImageBackground>
   );
@@ -122,27 +98,65 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     lineHeight: 30,
   },
-  question: {
-    padding:20,
-    backgroundColor: '#000',
+  questionContainer: {
+    width: '90%',
+    padding: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderRadius: 25,
-    opacity: 0.5,
+    marginBottom: 30,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    position: 'relative',
+  },
+  question: {
     fontSize: 18,
     fontWeight: '700',
     color: '#fff',
     textAlign: 'center',
-    marginBottom: 20,
+    lineHeight: 26,
+  },
+  buttonContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 10,
   },
   button: {
     width: '80%',
     marginBottom: 15,
     borderRadius: 25,
     overflow: 'hidden',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  questionNumberBadge: {
+    position: 'absolute',
+    top: -15,
+    right: 20,
+    backgroundColor: '#FF9800',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 15,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  questionNumberText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
