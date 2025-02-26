@@ -1,6 +1,6 @@
 // StoryHomeScreen.tsx (또는 Categories를 렌더링하는 화면)
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Header } from '../../../components/fairytale/Header';
 import { FeaturedStory } from '../../../components/fairytale/FeaturedStory';
@@ -77,25 +77,27 @@ export default function StoryHomeScreen() {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <Header />
-      <FeaturedStory
-        story={FEATURED_STORY}
-        onPress={() => navigateToStory(FEATURED_STORY)}
-        imagesLoaded={imagesLoaded}
-        onImageLoadChange={handleImageLoadChange}
-      />
-      <RecentStories
-        stories={RECENT_STORIES}
-        onStoryPress={navigateToStory}
-        imagesLoaded={imagesLoaded}
-        onImageLoadChange={handleImageLoadChange}
-      />
-      <Categories
-        categories={CATEGORIES}
-        onCategoryPress={navigateToCategory}
-      />
-    </ScrollView>
+    <View style={styles.container}>
+    <Header />
+      <ScrollView style={styles.scrollcontainer}>
+        <FeaturedStory
+          story={FEATURED_STORY}
+          onPress={() => navigateToStory(FEATURED_STORY)}
+          imagesLoaded={imagesLoaded}
+          onImageLoadChange={handleImageLoadChange}
+        />
+        <RecentStories
+          stories={RECENT_STORIES}
+          onStoryPress={navigateToStory}
+          imagesLoaded={imagesLoaded}
+          onImageLoadChange={handleImageLoadChange}
+        />
+        <Categories
+          categories={CATEGORIES}
+          onCategoryPress={navigateToCategory}
+        />
+      </ScrollView>
+    </View>
   );
 }
 
@@ -104,4 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
+  scrollcontainer: {
+    
+  }
 });

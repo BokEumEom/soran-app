@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SmilePlus, Frown, Angry, Skull, HelpCircle, Meh } from 'lucide-react-native';
+import { SmilePlus, Frown, Angry, Siren, Wind, Meh } from 'lucide-react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -30,7 +30,7 @@ type EmotionIconName =
   | 'frown'
   | 'angry'
   | 'siren'
-  | 'help-circle'
+  | 'Wind'
   | 'meh';
 
 type Emotion = {
@@ -74,7 +74,7 @@ const emotions: Emotion[] = [
     title: '불안/불확실감',
     description: '현재 기분이 불안해요.',
     colors: ['#B39DDB', '#9575CD'],
-    icon: 'help-circle',
+    icon: 'Wind',
     route: '/emotions/anxiety',
   },
   {
@@ -158,8 +158,8 @@ export default function EmotionsSlider() {
                 {emotion.icon === 'smile-plus' && <SmilePlus size={ICON_SIZE} color="#FFF" />}
                 {emotion.icon === 'frown' && <Frown size={ICON_SIZE} color="#FFF" />}
                 {emotion.icon === 'angry' && <Angry size={ICON_SIZE} color="#FFF" />}
-                {emotion.icon === 'skull' && <Skull size={ICON_SIZE} color="#FFF" />}
-                {emotion.icon === 'help-circle' && <HelpCircle size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'siren' && <Siren size={ICON_SIZE} color="#FFF" />}
+                {emotion.icon === 'Wind' && <Wind size={ICON_SIZE} color="#FFF" />}
                 {emotion.icon === 'meh' && <Meh size={ICON_SIZE} color="#FFF" />}
               </View>
               <CustomText style={styles.description}>
