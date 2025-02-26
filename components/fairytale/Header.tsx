@@ -4,12 +4,25 @@ import { UserRound } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomText from "@/components/common/CustomText";
 
-export const Header = () => (
-  <LinearGradient colors={['#FFB7B7', '#FFE2E2']} style={styles.header}>
+// 타입 정의 추가
+interface HeaderProps {
+  title?: string;
+  gradientColors?: string[];
+  textColor?: string;
+  iconColor?: string;
+}
+
+export const Header = ({
+  title = '안녕하세요!',
+  gradientColors = ['#FFB7B7', '#FFE2E2'],
+  textColor = '#FF6B6B',
+  iconColor = '#FF6B6B'
+}: HeaderProps) => (
+  <LinearGradient colors={gradientColors} style={styles.header}>
     <View style={styles.headerContent}>
-      <CustomText style={styles.greeting}>안녕하세요!</CustomText>
+      <CustomText style={[styles.greeting, { color: textColor }]}>{title}</CustomText>
       <TouchableOpacity style={styles.profileButton}>
-        <UserRound size={32} color="#FF6B6B" />
+        <UserRound size={32} color={iconColor} />
       </TouchableOpacity>
     </View>
   </LinearGradient>

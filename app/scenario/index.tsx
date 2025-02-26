@@ -29,7 +29,9 @@ const ScenarioListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header 
+        title="스토리 시뮬레이션"
+      />
       <FlatList
         data={scenarios}
         keyExtractor={(item) => item.id.toString()}

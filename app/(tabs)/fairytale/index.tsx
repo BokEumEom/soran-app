@@ -78,7 +78,9 @@ export default function StoryHomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header 
+        title="동화나라!"
+      />
       <ScrollView style={styles.scrollcontainer}>
         <FeaturedStory
           story={FEATURED_STORY}
@@ -107,6 +109,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   scrollcontainer: {
-    
+
   }
 });

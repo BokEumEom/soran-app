@@ -7,7 +7,9 @@ import EmotionsSelector from '../../components/emotions/EmotionsSelector';
 export default function EmotionsMain() {
   return (
     <View style={styles.container}>
-      <Header />
+      <Header 
+        title="나마네 감정 상태 췍!"
+      />
       <EmotionsSelector />
     </View>
   );

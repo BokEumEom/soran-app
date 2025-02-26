@@ -32,7 +32,9 @@ export default function GameSelectionScreen() {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header 
+        title="게임 고!고!"
+      />
       <FlatList
         data={gameOptions}
         keyExtractor={(item) => item.route}
@@ -63,7 +65,7 @@ export default function GameSelectionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F6FA',
+    backgroundColor: '#000',
   },
   listContainer: {
     paddingHorizontal: 10,

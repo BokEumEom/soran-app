@@ -46,8 +46,8 @@ const dashboardData: {
     link: '/meditate',
   },
   {
-    title: '세모동화',
-    subtitle: '마음 평안',
+    title: '셀프칭찬',
+    subtitle: '자존감 업!',
     icon: Award, // Lucide icon
     colors: ['#d4fc79', '#96e6a1'],
     link: '/self-praise',
