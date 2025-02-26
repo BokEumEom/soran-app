@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Animated } from 'react-native';
 import { Choice, determineWinner, getRandomChoice, choices } from '@/utils/play';
 
@@ -21,8 +21,12 @@ const ledImages = {
  */
 const initialImage = { uri: `${BASE_URL}/rock-led.png` };
 
+type GameResult = 'You win!' | 'You lose!' | 'It\'s a draw!';
+
 export const useRockPaperScissors = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userChoice, setUserChoice] = useState<Choice | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [computerChoice, setComputerChoice] = useState<Choice | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [score, setScore] = useState({ wins: 0, losses: 0, draws: 0 });
@@ -92,7 +96,7 @@ export const useRockPaperScissors = () => {
     }, 1000);
   };
 
-  const updateScore = (gameResult: string) => {
+  const updateScore = (gameResult: GameResult) => {
     if (gameResult === 'You win!') {
       setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
     } else if (gameResult === 'You lose!') {
@@ -136,6 +140,23 @@ export const useRockPaperScissors = () => {
     setResult(null);
   };
 
+  // useCallback을 사용하여 함수 재생성 방지
+  const handlePressIn = useCallback((index: number) => {
+    Animated.spring(scaleValues[index], {
+      toValue: 0.9,
+      useNativeDriver: true,
+    }).start();
+  }, [scaleValues]);
+
+  const handlePressOut = useCallback((index: number, choice: Choice) => {
+    Animated.spring(scaleValues[index], {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+    playGame(choice);
+  }, [scaleValues, playGame]);
+
+  // 메모이제이션된 값 반환
   return {
     userChoice,
     computerChoice,
@@ -149,18 +170,7 @@ export const useRockPaperScissors = () => {
     resetGame,
     closeModal,
     triggerFade,
-    handlePressIn: (index: number) => {
-      Animated.spring(scaleValues[index], {
-        toValue: 0.9,
-        useNativeDriver: true,
-      }).start();
-    },
-    handlePressOut: (index: number, choice: Choice) => {
-      Animated.spring(scaleValues[index], {
-        toValue: 1,
-        useNativeDriver: true,
-      }).start();
-      playGame(choice);
-    },
+    handlePressIn,
+    handlePressOut,
   };
 };

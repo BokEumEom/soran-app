@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import { ChevronLeft, ChevronRight, ChevronDown, RotateCcw, ArrowDownToLine } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -22,20 +23,22 @@ const GameControls: React.FC<GameControlsProps> = ({
     <View style={styles.container}>
       <View style={styles.controlRow}>
         <TouchableOpacity style={[styles.button, styles.leftButton]} onPress={onMoveLeft} activeOpacity={0.8}>
-          <Text style={styles.buttonText}>←</Text>
+          <ChevronLeft size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.rotateButton]} onPress={onRotate} activeOpacity={0.8}>
-          <Text style={styles.buttonText}>↻</Text>
+          <RotateCcw size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.rightButton]} onPress={onMoveRight} activeOpacity={0.8}>
-          <Text style={styles.buttonText}>→</Text>
+          <ChevronRight size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
       <View style={styles.controlRow}>
         <TouchableOpacity style={[styles.largeButton, styles.dropButton]} onPress={onDropDown} activeOpacity={0.8}>
+          <ArrowDownToLine size={24} color="#FFFFFF" />
           <Text style={styles.largeButtonText}>DROP</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.largeButton, styles.downButton]} onPress={onMoveDown} activeOpacity={0.8}>
+          <ChevronDown size={24} color="#FFFFFF" />
           <Text style={styles.largeButtonText}>DOWN</Text>
         </TouchableOpacity>
       </View>

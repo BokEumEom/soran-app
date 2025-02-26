@@ -1,124 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList, Dimensions, ActivityIndicator } from 'react-native';
-import { Header } from '@/components/common/Header';
+import { Header } from '../../components/fairytale/Header';
 import Card from '@/components/memory/Card';
 import { Button } from '@/components/common/Button';
 import ConfirmationModal from '@/components/common/Modal';
 import ResultModal from '@/components/game/ResultModal';
-import { shuffleArray } from '@/utils/helpers';
-import { Asset } from 'expo-asset';
+import useMemoryGame, { MemoryCard } from '@/hooks/useMemoryGame';
 
-type MemoryCard = {
-  id: string;
-  image: any;
-  isFlipped: boolean;
-  isMatched: boolean;
-};
-
-const cardImages = [
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/french-fries.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/chicken.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/hot-dog.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/donut.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/japanese-food.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/ice-cream.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/burger.png',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/game-images/cake.png',
-  },
-];
-
-// Preload essential card images
-const preloadImages = async () => {
-  const imageAssets = cardImages.map((image) => Asset.fromModule(image).downloadAsync());
-  await Promise.all(imageAssets);
-};
+// 메모이제이션된 카드 컴포넌트
+const MemoizedCard = React.memo(Card);
 
 export default function MemoryGameScreen() {
-  const [cards, setCards] = useState<MemoryCard[]>([]);
-  const [flippedCards, setFlippedCards] = useState<MemoryCard[]>([]);
-  const [score, setScore] = useState<number>(0);
-  const [moves, setMoves] = useState<number>(0);
+  const {
+    cards,
+    score, 
+    moves,
+    gameCompleted,
+    isAssetsLoaded,
+    handleCardPress,
+    initializeGame,
+    setGameCompleted
+  } = useMemoryGame();
+  
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [gameCompleted, setGameCompleted] = useState<boolean>(false);
-  const [isAssetsLoaded, setIsAssetsLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    const loadAssets = async () => {
-      await preloadImages();
-      setIsAssetsLoaded(true);
-      initializeGame();
-    };
-    loadAssets();
-  }, []);
-
-  useEffect(() => {
-    if (cards.length > 0 && cards.every((card) => card.isMatched)) {
-      setGameCompleted(true);
-    }
-  }, [cards]);
-
-  const initializeGame = useCallback(() => {
-    const initialCards = shuffleArray(
-      [...cardImages, ...cardImages].map((image, index) => ({
-        id: `${index}`,
-        image,
-        isFlipped: false,
-        isMatched: false,
-      }))
-    );
-    setCards(initialCards);
-    setScore(0);
-    setMoves(0);
-    setGameCompleted(false);
-  }, []);
-
-  const onCardPress = useCallback(
-    (card: MemoryCard) => {
-      if (flippedCards.length === 2 || card.isFlipped || card.isMatched) return;
-
-      const flipped = { ...card, isFlipped: true };
-      const newCards = cards.map((c) => (c.id === card.id ? flipped : c));
-      setCards(newCards);
-      setFlippedCards([...flippedCards, flipped]);
-
-      if (flippedCards.length === 1) {
-        setMoves((prevMoves) => prevMoves + 1);
-
-        if (flippedCards[0].image === card.image) {
-          setScore((prevScore) => prevScore + 1);
-          setCards((prevCards) =>
-            prevCards.map((c) => (c.image === card.image ? { ...c, isMatched: true } : c))
-          );
-          setFlippedCards([]);
-        } else {
-          setTimeout(() => {
-            setCards((prevCards) =>
-              prevCards.map((c) =>
-                c.id === card.id || c.id === flippedCards[0].id ? { ...c, isFlipped: false } : c
-              )
-            );
-            setFlippedCards([]);
-          }, 700); // Reduced delay for faster reset
-        }
-      }
-    },
-    [flippedCards, cards]
-  );
 
   const handleNewGamePress = () => {
     setShowModal(true);
@@ -128,6 +32,10 @@ export default function MemoryGameScreen() {
     setShowModal(false);
     initializeGame();
   };
+
+  const renderCard = useCallback(({ item }: { item: MemoryCard }) => (
+    <MemoizedCard card={item} onPress={() => handleCardPress(item)} />
+  ), [handleCardPress]);
 
   if (!isAssetsLoaded) {
     return (
@@ -139,7 +47,7 @@ export default function MemoryGameScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Memory Game" showBackButton titleColor="#000" />
+      <Header />
 
       <View style={styles.content}>
         <Text style={styles.scoreText}>Score: {score} | Moves: {moves}</Text>
@@ -148,8 +56,11 @@ export default function MemoryGameScreen() {
           data={cards}
           keyExtractor={(item) => item.id}
           numColumns={4}
-          renderItem={({ item }) => <Card card={item} onPress={() => onCardPress(item)} />}
+          renderItem={renderCard}
           contentContainerStyle={styles.cardsContainer}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={16}
+          windowSize={5}
         />
 
         <Button title="New Game" onPress={handleNewGamePress} style={styles.restartButton} />

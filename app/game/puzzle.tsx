@@ -1,12 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { View, StyleSheet, PanResponder, Text } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Header } from '../../components/fairytale/Header';
 import { GameProvider, useGame } from '../../contexts/TileContext';
 import GameBoard from '../../components/puzzle/GameBoard';
 import ScoreBoard from '../../components/puzzle/ScoreBoard';
 import { Button } from '../../components/common/Button';
 import KeyboardControls from '../../components/puzzle/KeyboardControls';
 import ConfirmationModal from '../../components/common/Modal';
+import { useTileGestures } from '../../hooks/useTileGestures';
 
 const PuzzleScreen = () => {
   return (
@@ -19,44 +21,9 @@ const PuzzleScreen = () => {
 const PuzzleGame = () => {
   const { moveTiles, gameOver, restartGame } = useGame();
   const [showModal, setShowModal] = useState(false);
-
-  // Shared values for animating the game container
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true, // Fix to prevent flickering
-      onMoveShouldSetPanResponder: () => false,
-      onPanResponderRelease: (evt, gestureState) => {
-        const { dx, dy } = gestureState;
-        if (Math.abs(dx) > Math.abs(dy)) {
-          if (dx > 0) {
-            moveTiles('right');
-            translateX.value = withSpring(10, {}, () => (translateX.value = 0));
-          } else {
-            moveTiles('left');
-            translateX.value = withSpring(-10, {}, () => (translateX.value = 0));
-          }
-        } else {
-          if (dy > 0) {
-            moveTiles('down');
-            translateY.value = withSpring(10, {}, () => (translateY.value = 0));
-          } else {
-            moveTiles('up');
-            translateY.value = withSpring(-10, {}, () => (translateY.value = 0));
-          }
-        }
-      },
-    })
-  ).current;
-
-  // Animated style for smooth screen transitions
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
-    };
-  });
+  
+  // 커스텀 훅 사용
+  const { panResponder, animatedStyle } = useTileGestures(moveTiles);
 
   // Handler for "New Game" button
   const handleNewGamePress = () => {
@@ -79,6 +46,7 @@ const PuzzleGame = () => {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Animated.View style={[styles.gameContainer, animatedStyle]} {...panResponder.panHandlers}>
         <ScoreBoard />
         <GameBoard />

@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Animated } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 type GameModeSelectionProps = {
   onModeSelect: (singlePlayer: boolean, aiAs: 'black' | 'white' | null) => void;
@@ -7,14 +10,57 @@ type GameModeSelectionProps = {
   selectedMode: { singlePlayer: boolean; aiAs: 'black' | 'white' | null };
 };
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+// AnimatedTouchableOpacity 생성
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-const GameModeSelection: React.FC<GameModeSelectionProps> = ({ onModeSelect, onStartGame, selectedMode }) => {
+// 버튼에 스케일 애니메이션을 적용한 커스텀 컴포넌트
+const AnimatedButton: React.FC<{
+  onPress: () => void;
+  style?: any;
+  children: React.ReactNode;
+}> = ({ onPress, style, children }) => {
+  const scale = React.useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.spring(scale, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scale, {
+      toValue: 1,
+      friction: 3,
+      tension: 40,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <AnimatedTouchableOpacity
+      activeOpacity={0.8}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      onPress={onPress}
+      style={[style, { transform: [{ scale }] }]}
+    >
+      {children}
+    </AnimatedTouchableOpacity>
+  );
+};
+
+const GameModeSelection: React.FC<GameModeSelectionProps> = ({
+  onModeSelect,
+  onStartGame,
+  selectedMode,
+}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Othello</Text>
       <Text style={styles.subtitle}>Choose Game Mode</Text>
-      <TouchableOpacity
+
+      <AnimatedButton
         style={[
           styles.button,
           selectedMode.singlePlayer && selectedMode.aiAs === 'black' && styles.buttonSelected,
@@ -22,8 +68,9 @@ const GameModeSelection: React.FC<GameModeSelectionProps> = ({ onModeSelect, onS
         onPress={() => onModeSelect(true, 'black')}
       >
         <Text style={styles.buttonText}>Play Against AI (You: White)</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </AnimatedButton>
+
+      <AnimatedButton
         style={[
           styles.button,
           selectedMode.singlePlayer && selectedMode.aiAs === 'white' && styles.buttonSelected,
@@ -31,16 +78,18 @@ const GameModeSelection: React.FC<GameModeSelectionProps> = ({ onModeSelect, onS
         onPress={() => onModeSelect(true, 'white')}
       >
         <Text style={styles.buttonText}>Play Against AI (You: Black)</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </AnimatedButton>
+
+      <AnimatedButton
         style={[styles.button, !selectedMode.singlePlayer && styles.buttonSelected]}
         onPress={() => onModeSelect(false, null)}
       >
         <Text style={styles.buttonText}>Two Players</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.startButton} onPress={onStartGame}>
+      </AnimatedButton>
+
+      <AnimatedButton style={styles.startButton} onPress={onStartGame}>
         <Text style={styles.startButtonText}>Start Game</Text>
-      </TouchableOpacity>
+      </AnimatedButton>
     </View>
   );
 };
@@ -68,6 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 10,
     width: SCREEN_WIDTH * 0.8,
+    elevation: 4,
   },
   buttonSelected: {
     backgroundColor: '#3CB371',
@@ -84,6 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 30,
     width: SCREEN_WIDTH * 0.8,
+    elevation: 4,
   },
   startButtonText: {
     color: '#000',

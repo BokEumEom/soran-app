@@ -1,10 +1,8 @@
-// components/emotions/QuestionSection.tsx
-import React, { useState } from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
-import { Button } from '../common/Button';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Animated } from 'react-native';
 import CustomText from '@/components/common/CustomText';
 import { emotionStates } from '@/constants/emotions/emotionStates';
-import { Indicator } from './Indicator';
+import { CheckCircle, XCircle } from 'lucide-react-native';
 
 type QuestionSectionProps = {
   section: { title: string; questions: string[]; conclusions: any };
@@ -15,6 +13,17 @@ type QuestionSectionProps = {
 export default function QuestionSection({ section, onNext, emotionKey }: QuestionSectionProps) {
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // 질문이 바뀔 때마다 fade 애니메이션을 재생합니다.
+    fadeAnim.setValue(0);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [currentQuestion, fadeAnim]);
 
   const selectedEmotion = emotionStates.find(e => e.key === emotionKey);
 
@@ -36,42 +45,37 @@ export default function QuestionSection({ section, onNext, emotionKey }: Questio
       resizeMode="cover"
     >
       <View style={styles.container}>
-        <Indicator 
-          total={section.questions.length} 
-          selectedIndex={currentQuestion}
-          activeColor="#FF9800"
-          inactiveColor="rgba(255, 255, 255, 0.5)"
-        />
-        
         <CustomText style={styles.title}>{section.title}</CustomText>
-        <View style={styles.questionContainer}>
-          <CustomText style={styles.question}>{section.questions[currentQuestion]}</CustomText>
+        
+        {/* Animated.View를 사용하여 질문 컨테이너에 페이드인 효과 적용 */}
+        <Animated.View style={[styles.questionContainer, { opacity: fadeAnim }]}>
+          <CustomText style={styles.question}>
+            {section.questions[currentQuestion]}
+          </CustomText>
           
           <View style={styles.questionNumberBadge}>
             <CustomText style={styles.questionNumberText}>
               {currentQuestion + 1}/{section.questions.length}
             </CustomText>
           </View>
-        </View>
+        </Animated.View>
         
         <View style={styles.buttonContainer}>
-          <Button
-            title="Yes"
+          <TouchableOpacity 
+            style={[styles.answerCard, { borderColor: '#4CAF50' }]}
             onPress={() => handleAnswer(true)}
-            gradientColors={['#4CAF50', '#66BB6A']}
-            style={styles.button}
-            textStyle={styles.buttonText}
-            icon="check-circle"
-          />
+          >
+            <CheckCircle size={24} color="#4CAF50" />
+            <CustomText style={styles.answerText}>네, 그렇습니다</CustomText>
+          </TouchableOpacity>
 
-          <Button
-            title="No"
+          <TouchableOpacity 
+            style={[styles.answerCard, { borderColor: '#F44336' }]}
             onPress={() => handleAnswer(false)}
-            gradientColors={['#F44336', '#EF5350']}
-            style={styles.button}
-            textStyle={styles.buttonText}
-            icon="times-circle"
-          />
+          >
+            <XCircle size={24} color="#F44336" />
+            <CustomText style={styles.answerText}>아니요</CustomText>
+          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -87,7 +91,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center', // 질문, 버튼 중앙 배치
-    backgroundColor: 'rgba(255, 241, 230, 0.7)', // 배경 이미지 위에 반투명 레이어로 읽기 쉬운 텍스트 제공
+    backgroundColor: 'rgba(255, 241, 230, 0.7)', // 배경 이미지 위에 반투명 레이어로 텍스트 가독성 향상
   },
   title: {
     fontSize: 22,
@@ -101,44 +105,41 @@ const styles = StyleSheet.create({
   questionContainer: {
     width: '90%',
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 25,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 변경: 배경 투명도 조절
+    borderRadius: 15,                        // 변경: 모서리를 둥글게 처리
     marginBottom: 30,
     elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
     position: 'relative',
   },
   question: {
-    fontSize: 18,
+    fontSize: 20,      // 변경: 글자 크기 증가
     fontWeight: '700',
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 26,
+    lineHeight: 28,    // 변경: 줄 간격 증가
   },
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
     marginTop: 10,
   },
-  button: {
+  answerCard: {
     width: '80%',
     marginBottom: 15,
+    borderWidth: 2,
     borderRadius: 25,
     overflow: 'hidden',
     elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  buttonText: {
-    color: '#FFFFFF',
+  answerText: {
+    color: '#000',
     fontSize: 17,
     fontWeight: '600',
     textAlign: 'center',
+    marginLeft: 8, // 아이콘과 텍스트 사이 여백 추가
   },
   questionNumberBadge: {
     position: 'absolute',

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react-native';
 
 type KeyboardControlsProps = {
   onMove: (direction: 'up' | 'down' | 'left' | 'right') => void;
@@ -10,18 +11,18 @@ const KeyboardControls: React.FC<KeyboardControlsProps> = ({ onMove }) => {
     <View style={styles.controlContainer}>
       <View style={styles.row}>
         <TouchableOpacity style={styles.controlButton} onPress={() => onMove('up')}>
-          <Text style={styles.controlButtonText}>↑</Text>
+          <ArrowUp size={28} color="#fff" />
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.controlButton} onPress={() => onMove('left')}>
-          <Text style={styles.controlButtonText}>←</Text>
+          <ArrowLeft size={28} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.controlButton} onPress={() => onMove('down')}>
-          <Text style={styles.controlButtonText}>↓</Text>
+          <ArrowDown size={28} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.controlButton} onPress={() => onMove('right')}>
-          <Text style={styles.controlButtonText}>→</Text>
+          <ArrowRight size={28} color="#fff" />
         </TouchableOpacity>
       </View>
     </View>
@@ -51,11 +52,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 10,
     borderRadius: 8,
-  },
-  controlButtonText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
   },
 });
 
