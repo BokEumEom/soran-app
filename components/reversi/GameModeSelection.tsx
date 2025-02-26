@@ -1,95 +1,142 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Animated } from 'react-native';
-import { TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withTiming,
+  Easing
+} from 'react-native-reanimated';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { AIPlayerType } from '@/hooks/useReversiGame';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-type GameModeSelectionProps = {
-  onModeSelect: (singlePlayer: boolean, aiAs: 'black' | 'white' | null) => void;
+interface GameModeSelectionProps {
+  selectedMode: { singlePlayer: boolean; aiAs: AIPlayerType };
+  onModeSelect: (singlePlayer: boolean, aiAs: AIPlayerType) => void;
   onStartGame: () => void;
-  selectedMode: { singlePlayer: boolean; aiAs: 'black' | 'white' | null };
-};
+}
 
-// AnimatedTouchableOpacity 생성
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
-// 버튼에 스케일 애니메이션을 적용한 커스텀 컴포넌트
-const AnimatedButton: React.FC<{
-  onPress: () => void;
-  style?: any;
+// 최적화된 애니메이션 버튼 컴포넌트
+const AnimatedButton = ({ 
+  onPress, 
+  isSelected, 
+  children,
+  testID
+}: { 
+  onPress: () => void; 
+  isSelected: boolean; 
   children: React.ReactNode;
-}> = ({ onPress, style, children }) => {
-  const scale = React.useRef(new Animated.Value(1)).current;
-
+  testID?: string;
+}) => {
+  const scale = useSharedValue(1);
+  
+  // 더 빠른 애니메이션 설정
   const handlePressIn = () => {
-    Animated.spring(scale, {
-      toValue: 0.95,
-      useNativeDriver: true,
-    }).start();
+    scale.value = withTiming(0.95, { 
+      duration: 50,  // 더 짧은 시간
+      easing: Easing.linear  // 선형 이징으로 단순화
+    });
   };
-
+  
   const handlePressOut = () => {
-    Animated.spring(scale, {
-      toValue: 1,
-      friction: 3,
-      tension: 40,
-      useNativeDriver: true,
-    }).start();
+    scale.value = withTiming(1, { 
+      duration: 50,  // 더 짧은 시간
+      easing: Easing.linear  // 선형 이징으로 단순화
+    });
   };
-
+  
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+      backgroundColor: isSelected ? '#3CB371' : '#2E8B57',
+      paddingVertical: 15,
+      paddingHorizontal: 30,
+      borderRadius: 8,
+      marginVertical: 10,
+      width: SCREEN_WIDTH * 0.8,
+      elevation: 4,
+    };
+  });
+  
   return (
-    <AnimatedTouchableOpacity
-      activeOpacity={0.8}
+    <TouchableOpacity
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       onPress={onPress}
-      style={[style, { transform: [{ scale }] }]}
+      activeOpacity={0.7}
+      testID={testID}
+      // 터치 반응성 향상을 위한 설정
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      pressRetentionOffset={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      delayPressIn={0}
     >
-      {children}
-    </AnimatedTouchableOpacity>
+      <Animated.View style={animatedStyle}>
+        {children}
+      </Animated.View>
+    </TouchableOpacity>
   );
 };
 
 const GameModeSelection: React.FC<GameModeSelectionProps> = ({
+  selectedMode,
   onModeSelect,
   onStartGame,
-  selectedMode,
 }) => {
+  // 메모이제이션된 콜백 함수
+  const handlePlayAsWhite = useCallback(() => {
+    onModeSelect(true, 'black');
+  }, [onModeSelect]);
+
+  const handlePlayAsBlack = useCallback(() => {
+    onModeSelect(true, 'white');
+  }, [onModeSelect]);
+
+  const handleTwoPlayers = useCallback(() => {
+    onModeSelect(false, null);
+  }, [onModeSelect]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Othello</Text>
       <Text style={styles.subtitle}>Choose Game Mode</Text>
 
       <AnimatedButton
-        style={[
-          styles.button,
-          selectedMode.singlePlayer && selectedMode.aiAs === 'black' && styles.buttonSelected,
-        ]}
-        onPress={() => onModeSelect(true, 'black')}
+        isSelected={selectedMode.singlePlayer && selectedMode.aiAs === 'black'}
+        onPress={handlePlayAsWhite}
+        testID="play-as-white-button"
       >
         <Text style={styles.buttonText}>Play Against AI (You: White)</Text>
       </AnimatedButton>
 
       <AnimatedButton
-        style={[
-          styles.button,
-          selectedMode.singlePlayer && selectedMode.aiAs === 'white' && styles.buttonSelected,
-        ]}
-        onPress={() => onModeSelect(true, 'white')}
+        isSelected={selectedMode.singlePlayer && selectedMode.aiAs === 'white'}
+        onPress={handlePlayAsBlack}
+        testID="play-as-black-button"
       >
         <Text style={styles.buttonText}>Play Against AI (You: Black)</Text>
       </AnimatedButton>
 
       <AnimatedButton
-        style={[styles.button, !selectedMode.singlePlayer && styles.buttonSelected]}
-        onPress={() => onModeSelect(false, null)}
+        isSelected={!selectedMode.singlePlayer}
+        onPress={handleTwoPlayers}
+        testID="two-players-button"
       >
         <Text style={styles.buttonText}>Two Players</Text>
       </AnimatedButton>
 
-      <AnimatedButton style={styles.startButton} onPress={onStartGame}>
+      <TouchableOpacity 
+        style={styles.startButton} 
+        onPress={onStartGame} 
+        activeOpacity={0.7}
+        testID="start-game-button"
+        // 터치 반응성 향상을 위한 설정
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        pressRetentionOffset={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        delayPressIn={0}
+      >
         <Text style={styles.startButtonText}>Start Game</Text>
-      </AnimatedButton>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -109,18 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#FFFFFF',
     marginBottom: 30,
-  },
-  button: {
-    backgroundColor: '#2E8B57',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 8,
-    marginVertical: 10,
-    width: SCREEN_WIDTH * 0.8,
-    elevation: 4,
-  },
-  buttonSelected: {
-    backgroundColor: '#3CB371',
   },
   buttonText: {
     color: '#FFFFFF',
@@ -144,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GameModeSelection;
+export default React.memo(GameModeSelection);
