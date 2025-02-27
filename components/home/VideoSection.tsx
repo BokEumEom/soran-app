@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import CustomText from "@/components/common/CustomText";
 
-const messages = [
+// 상수 분리
+const MESSAGES = [
   "지금도 충분히 잘하고 있어요 🎉",
   "당신은 소중한 사람입니다 💖",
   "당신의 있는 그대로의 모습이 소중합니다 😊",
   "잠시 쉬어가도 괜찮아요 🌱",
   "당신의 가능성을 믿어요 🌟",
 ];
+
+const MESSAGE_INTERVAL = 3000; // 3초
 
 // 공통 CDN 경로 (이미지)
 const BASE_URL = 'https://raw.githubusercontent.com/BokEumEom/makeup-app/refs/heads/main/assets/images';
@@ -18,8 +21,8 @@ const VideoSection: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentMessage((prevMessage) => (prevMessage + 1) % messages.length);
-    }, 3000); // 3초마다 메시지 변경
+      setCurrentMessage((prevMessage) => (prevMessage + 1) % MESSAGES.length);
+    }, MESSAGE_INTERVAL);
     return () => clearInterval(interval);
   }, []);
 
@@ -27,7 +30,7 @@ const VideoSection: React.FC = () => {
     <View style={styles.container}>
       {/* 말풍선 */}
       <View style={styles.speechBubble}>
-        <CustomText style={styles.speechText}>{messages[currentMessage]}</CustomText>
+        <CustomText style={styles.speechText}>{MESSAGES[currentMessage]}</CustomText>
       </View>
 
       {/* GIF */}
@@ -36,6 +39,7 @@ const VideoSection: React.FC = () => {
           source={{ uri: `${BASE_URL}/soran.gif` }}
           style={styles.gif}
           resizeMode="contain"
+          accessibilityLabel="소란이 캐릭터 애니메이션"
         />
       </View>
     </View>
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     zIndex: 1,
     marginLeft: width * -0.12,
+    marginTop: 10,
   },
   speechText: {
     fontSize: width * 0.035,

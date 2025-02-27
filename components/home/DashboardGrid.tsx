@@ -1,55 +1,47 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import DashboardCard from './DashboardCard'; // Assuming DashboardCard is already available
-import { Smile, PersonStanding, Joystick, Book, Headphones, Award } from 'lucide-react-native'; // Import Lucide icons
+import DashboardCard from './DashboardCard';
 
 const dashboardData: {
   title: string;
   subtitle: string;
-  icon: React.FC; // Use Lucide icon components
-  colors: [string, string];
+  image: any; // Path to the image
   link: string;
 }[] = [
   {
     title: '감정 지수',
-    subtitle: '나만의 감정 상태 췍',
-    icon: Smile, // Lucide icon
-    colors: ['#ff9a9e', '#fad0c4'],
+    subtitle: '나의 감정 상태',
+    image: require('@/assets/images/category/emotions.jpg'),
     link: '/emotions',
   },
   {
     title: 'MBTI',
-    subtitle: '내 성격 유형 췍',
-    icon: PersonStanding, // Lucide icon
-    colors: ['#a1c4fd', '#c2e9fb'],
+    subtitle: '성격 유형 분석',
+    image: require('@/assets/images/category/image02.png'),
     link: '/mbti',
   },
   {
-    title: '게임',
-    subtitle: '즐겜 GOGO',
-    icon: Joystick, // Lucide icon
-    colors: ['#fbc2eb', '#a6c1ee'],
+    title: 'GAME',
+    subtitle: '즐겜 GO!GO!',
+    image: require('@/assets/images/category/image03.png'),
     link: '/game',
   },
   {
     title: '시나리오',
-    subtitle: '스토리 시뮬레이션',
-    icon: Book, // Lucide icon
-    colors: ['#fad0c4', '#ffd1ff'],
+    subtitle: '가상 상황 연습',
+    image: require('@/assets/images/category/scenario.jpg'),
     link: '/scenario',
   },
   {
     title: '마음챙김',
-    subtitle: '명상 수련',
-    icon: Headphones, // Lucide icon
-    colors: ['#ffecd2', '#fcb69f'],
+    subtitle: '명상과 휴식',
+    image: require('@/assets/images/category/meditate.jpg'),
     link: '/meditate',
   },
   {
     title: '셀프칭찬',
-    subtitle: '자존감 업!',
-    icon: Award, // Lucide icon
-    colors: ['#d4fc79', '#96e6a1'],
+    subtitle: '긍정의 한마디',
+    image: require('@/assets/images/category/self-praise.jpg'),
     link: '/self-praise',
   },
 ];
@@ -69,7 +61,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: 15
   },
 });
 
