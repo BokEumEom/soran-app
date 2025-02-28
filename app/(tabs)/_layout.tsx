@@ -7,8 +7,18 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-const cacheImages = async (images: number[]) => {
-  await Promise.all(images.map(image => Asset.loadAsync(image)));
+const cacheImages = async (images: Array<number | { uri: string }>) => {
+  return Promise.all(
+    images.map(image => {
+      if (typeof image === 'number') {
+        // Handle local images (required assets)
+        return Asset.fromModule(image).downloadAsync();
+      } else {
+        // Handle remote images with URI
+        return Asset.fromURI(image.uri).downloadAsync();
+      }
+    })
+  );
 };
 
 const BASE_URL =
@@ -27,7 +37,18 @@ export default function TabLayout() {
 
   useEffect(() => {
     const loadAssets = async () => {
-      const images = [
+      // Local dashboard images
+      const localImages = [
+        require('@/assets/images/category/emotions.jpg'),
+        require('@/assets/images/category/mbti.jpg'),
+        require('@/assets/images/category/game.jpg'),
+        require('@/assets/images/category/scenario.jpg'),
+        require('@/assets/images/category/meditate.jpg'),
+        require('@/assets/images/category/self-praise.jpg'),
+      ];
+      
+      // Remote images
+      const remoteImages = [
         { uri: `${GAME_IMAGES}/rock-led.png` },
         { uri: `${GAME_IMAGES}/scissors-led.png` },
         { uri: `${GAME_IMAGES}/paper-led.png` },
@@ -60,7 +81,8 @@ export default function TabLayout() {
         { uri: `${EMOTIONS}/mint-bear-struggling.webp` },
         { uri: `${EMOTIONS}/mint-bear-character-balance.webp` },
       ];
-      await cacheImages(images);
+      
+      await cacheImages([...localImages, ...remoteImages]);
       setIsReady(true);
     };
 
