@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   widgetContainer: {
     width: 100,
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

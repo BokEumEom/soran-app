@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   recentImage: {
     width: width * 0.26,
     height: height * 0.17,
-    borderRadius: width * 0.04,
+    borderRadius: 16,
   },
   recentTitle: {
     fontSize: width * 0.035, // 3.5% of screen width

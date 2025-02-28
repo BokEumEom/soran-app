@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
   },
   listcontent: {
     paddingHorizontal: 15,
-    paddingVertical: 15
+    paddingVertical: 10
   }
 });

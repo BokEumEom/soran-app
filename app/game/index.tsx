@@ -48,7 +48,6 @@ export default function GameSelectionScreen() {
               onPress={() => router.push(item.route)}
             >
               <Image source={item.image} style={styles.gameImage} />
-              <View style={styles.overlay} />
               <View style={styles.cardFooter}>
                 <CustomText style={styles.cardTitle}>{item.title}</CustomText>
               </View>
@@ -65,7 +64,7 @@ export default function GameSelectionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#F5F6FA',
   },
   listContainer: {
     paddingHorizontal: 10,
@@ -79,7 +78,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     margin: 5,
     elevation: 5,
-    backgroundColor: 'white',
     position: 'relative',
   },
   cardPressed: {
@@ -89,10 +87,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain',
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   cardFooter: {
     position: 'absolute',

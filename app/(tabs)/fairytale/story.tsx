@@ -9,7 +9,7 @@ import { ProgressDots } from '../../../components/fairytale/ProgressDots';
 import { useStoryAnimation } from '@/hooks/useStoryAnimation';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { COLORS } from '@/constants/fairytale/colors';
-import { storyPages } from '@/constants/fairytale/stories';
+import { storyPages, KONGI_STORY } from '@/constants/fairytale/stories';
 
 const { width, height } = Dimensions.get('window');
 const AnimatedImage = Animated.createAnimatedComponent(Image);
@@ -18,7 +18,7 @@ export default function StoryDetailScreen() {
   const [currentPage, setCurrentPage] = useState(0);
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
 
-  const currentStory = storyPages[currentPage];
+  const currentStory = KONGI_STORY.pages[currentPage];
   if (!currentStory) {
     return (
       <View style={styles.container}>
@@ -29,7 +29,7 @@ export default function StoryDetailScreen() {
 
   const changePage = useCallback((direction: number) => {
     const newPage = currentPage + direction;
-    if (newPage >= 0 && newPage < storyPages.length) {
+    if (newPage >= 0 && newPage < KONGI_STORY.pages.length) {
       setCurrentPage(newPage);
     }
   }, [currentPage]);
@@ -51,11 +51,9 @@ export default function StoryDetailScreen() {
   }, [currentPage, currentStory.image, resetAnimations]);
 
   useEffect(() => {
-    if (currentPage < storyPages.length - 1) {
-      const nextImageUrl = storyPages[currentPage + 1].image;
-      Image.prefetch(nextImageUrl).catch(error => {
-        console.log('Image prefetch error:', error);
-      });
+    if (currentPage < KONGI_STORY.pages.length - 1) {
+      // No need to prefetch local images with require()
+      // They're already bundled with the app
     }
   }, [currentPage]);
 
@@ -65,7 +63,7 @@ export default function StoryDetailScreen() {
       <LinearGradient colors={COLORS.background} style={styles.background}>
         {backgroundImage && (
           <Animated.Image
-            source={{ uri: backgroundImage }}
+            source={backgroundImage}
             style={[StyleSheet.absoluteFillObject, styles.backgroundImage]}
             blurRadius={30}
           />
@@ -73,7 +71,7 @@ export default function StoryDetailScreen() {
         <GestureDetector gesture={panGesture}>
           <Animated.View style={[styles.pageContainer, pageStyle]}>
             <AnimatedImage
-              source={{ uri: currentStory.image }}
+              source={currentStory.image}
               style={[styles.storyImage, imageAnimatedStyle]}
               onLoadStart={() => handleLoadChange(currentPage, false)}
               onLoadEnd={() => handleLoadChange(currentPage, true)}
@@ -89,12 +87,12 @@ export default function StoryDetailScreen() {
             />
             <PageNavigation
               currentPage={currentPage}
-              totalPages={storyPages.length}
+              totalPages={KONGI_STORY.pages.length}
               onChangePage={changePage}
             />
             <ProgressDots
               currentPage={currentPage}
-              totalPages={storyPages.length}
+              totalPages={KONGI_STORY.pages.length}
             />
           </Animated.View>
         </GestureDetector>

@@ -23,7 +23,7 @@ const ResignationBanner: React.FC = () => {
 const styles = StyleSheet.create({
   resignationBanner: {
     marginTop: 10,
-    borderRadius: 20,
+    borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 10,
     borderWidth: 1.5,

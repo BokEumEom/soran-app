@@ -17,13 +17,13 @@ const dashboardData: {
   {
     title: 'MBTI',
     subtitle: '성격 유형 분석',
-    image: require('@/assets/images/category/image02.png'),
+    image: require('@/assets/images/category/mbti.jpg'),
     link: '/mbti',
   },
   {
     title: 'GAME',
     subtitle: '즐겜 GO!GO!',
-    image: require('@/assets/images/category/image03.png'),
+    image: require('@/assets/images/category/game.jpg'),
     link: '/game',
   },
   {

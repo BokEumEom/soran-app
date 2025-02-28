@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import WeatherWidget from '@/components/weather/WeatherWidget';
 import CustomText from '@/components/common/CustomText';
 
@@ -37,8 +36,6 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 10,
   },
   progressContainer: {
     flex: 1,

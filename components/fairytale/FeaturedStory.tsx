@@ -5,7 +5,11 @@ import { Story } from './types';
 import { StoryImage } from './StoryImage';
 
 interface FeaturedStoryProps {
-  story: Story;
+  story: {
+    title: string;
+    image: string | number;  // 로컬 이미지를 위해 number 타입 추가
+    description: string;
+  };
   onPress: () => void;
   imagesLoaded: Record<string | number, boolean>;
   onImageLoadChange: (id: string | number, isLoaded: boolean) => void;
@@ -13,7 +17,7 @@ interface FeaturedStoryProps {
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const ITEM_WIDTH = screenWidth * 0.9;
-const ITEM_HEIGHT = screenHeight / 2.5;
+const ITEM_HEIGHT = screenHeight / 2.1;
 
 export const FeaturedStory = ({ story, onPress, imagesLoaded, onImageLoadChange }: FeaturedStoryProps) => (
   <View style={styles.featuredContainer}>
@@ -50,7 +54,8 @@ const styles = StyleSheet.create({
   },
   featuredImage: {
     width: ITEM_WIDTH,
-    height: ITEM_HEIGHT
+    height: ITEM_HEIGHT,
+    borderRadius: 16,
   },
   featuredContent: {
     padding: screenWidth * 0.04,
