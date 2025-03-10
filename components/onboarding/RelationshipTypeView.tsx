@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 40,
-    backgroundColor: '#fff',
     paddingHorizontal: PADDING_HORIZONTAL,
   },
   scrollContainer: {
@@ -124,6 +123,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   typesContainer: {
+
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
