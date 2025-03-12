@@ -3,7 +3,8 @@ import { Scenario } from '@/types/scenario';
 export const scenario14: Scenario = {
   id: 14,
   title: '모르는 사람에게 도움을 요청받았을 때',
-  description: '길을 가던 중 모르는 사람이 도움을 요청하는 상황입니다. 이때 어떻게 대처할 것인지 선택합니다.',
+  description:
+    '길을 가던 중 모르는 사람이 도움을 요청하는 상황입니다. 이때 어떻게 대처할 것인지 선택합니다.',
   chapters: [
     {
       id: 1,
@@ -14,7 +15,8 @@ export const scenario14: Scenario = {
           text: '도와주기로 결심하고 필요한 도움을 제공한다.',
           nextChapterId: 2,
           emotionalImpact: { stress: -5, confidence: 10, happiness: 15, anxiety: -5 },
-          message: '도움을 주었고 상대방은 매우 감사해했습니다. 자신감이 상승하고 기분이 좋아졌습니다.',
+          message:
+            '도움을 주었고, 상대방이 감사의 마음을 전하며 당신도 기분이 좋아졌습니다.',
         },
         {
           id: 2,
@@ -28,7 +30,8 @@ export const scenario14: Scenario = {
           text: '무시하고 그냥 지나간다.',
           nextChapterId: 4,
           emotionalImpact: { stress: 5, confidence: -5, happiness: -10, anxiety: 10 },
-          message: '그냥 지나쳤지만 마음에 불편함이 남고 스트레스가 조금 증가했습니다.',
+          message:
+            '그냥 지나쳤지만, 마음 한 켠에 불편함이 남아 스트레스가 조금 증가했습니다.',
         },
       ],
     },
@@ -48,7 +51,8 @@ export const scenario14: Scenario = {
           text: '도움만 주고 길을 떠난다.',
           nextChapterId: 5,
           emotionalImpact: { stress: -5, confidence: 10, happiness: 10, anxiety: -5 },
-          message: '도움만 주고 헤어졌으며, 자신이 한 선행에 만족감을 느꼈습니다.',
+          message:
+            '도움만 주고 헤어지면서, 자신이 한 선행에 만족감을 느꼈습니다.',
         },
       ],
     },
@@ -61,14 +65,16 @@ export const scenario14: Scenario = {
           text: '마음을 바꾸고 도와주기로 한다.',
           nextChapterId: 5,
           emotionalImpact: { stress: -5, confidence: 10, happiness: 15, anxiety: -5 },
-          message: '결국 도움을 주었고 기분이 좋아졌습니다. 상황이 잘 마무리되었습니다.',
+          message:
+            '결국 마음을 바꾸어 도움을 주었고, 상황이 긍정적으로 마무리되었습니다.',
         },
         {
           id: 2,
           text: '계속해서 거절하고 자리를 떠난다.',
           nextChapterId: 6,
           emotionalImpact: { stress: 10, confidence: -10, happiness: -10, anxiety: 10 },
-          message: '계속 거절했지만 불편한 마음이 남아 기분이 나빠졌습니다.',
+          message:
+            '계속 거절했지만, 불편한 마음이 남아 기분이 좋지 않았습니다.',
         },
       ],
     },
@@ -81,14 +87,16 @@ export const scenario14: Scenario = {
           text: '후회하며 다시 돌아가 도와준다.',
           nextChapterId: 5,
           emotionalImpact: { stress: -5, confidence: 10, happiness: 10, anxiety: -5 },
-          message: '다시 돌아가 도움을 주었고 기분이 좋아졌습니다. 후회가 사라졌습니다.',
+          message:
+            '후회 속에서 다시 돌아가 도움을 주었고, 마음의 부담이 줄어들었습니다.',
         },
         {
           id: 2,
           text: '계속 무시하고 마음을 정리한다.',
           nextChapterId: 6,
           emotionalImpact: { stress: 10, confidence: -10, happiness: -10, anxiety: 10 },
-          message: '결국 도움을 주지 않았고 기분이 나빠지며 스트레스가 계속 남았습니다.',
+          message:
+            '계속해서 무시하자 불편함이 계속되고, 스트레스가 누적되었습니다.',
         },
       ],
     },
