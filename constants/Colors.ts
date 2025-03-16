@@ -23,6 +23,18 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
   },
+  primary: "#007AFF", // iOS 기본 블루
+  secondary: "#FF9500", // 강조 색상
+  success: "#4CD964", // 성공
+  danger: "#FF3B30", // 오류
+  warning: "#FFCC00", // 경고
+  white: "#FFFFFF",
+  black: "#000000",
+  gray: "#8E8E93",
+  lightGray: "#D1D1D6",
+  darkGray: "#3A3A3C",
+  background: "#F2F2F7", // 기본 배경색
+  darkBackground: "#1C1C1E", // 다크 모드 배경색
 };
 
 export const GAMECOLORS = {
@@ -32,3 +44,6 @@ export const GAMECOLORS = {
   white: '#FFFFFF',
   gray: '#f0f0f0',
 };
+
+// ✅ Colors를 기본 내보내기로 설정
+export default Colors;
