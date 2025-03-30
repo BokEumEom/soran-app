@@ -24,8 +24,8 @@ const WeatherWidget: React.FC = () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert(
-        '위치 권한이 필요합니다',
-        '위치 기반 날씨 정보를 제공하려면 권한을 허용해주세요.'
+        '위치 권한이 필요해요',
+        '위치 기반 날씨 정보를 제공하기 위한 권한을 허용해주세요.'
       );
       setHasPermission(false);
       return;
@@ -86,7 +86,7 @@ const WeatherWidget: React.FC = () => {
       case 'Rain':
         return { colors: ['#6EB1F7', '#4A90E2'], icon: CloudRain };
       case 'Clear':
-        return { colors: ['#FFDEAB', '#FDB813'], icon: Sun };
+        return { colors: ['#FDB813', '#FDB813'], icon: Sun };
       case 'Clouds':
         return { colors: ['#C4C4C4', '#A1A1A1'], icon: Cloud };
       case 'Snow':
@@ -116,14 +116,14 @@ const WeatherWidget: React.FC = () => {
 
 const styles = StyleSheet.create({
   widgetContainer: {
-    width: 100,
+    width: 70,
     padding: 10,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tempText: {
-    fontSize: 24,
+    fontSize: 14,
     color: '#fff',
     fontWeight: 'bold',
   },

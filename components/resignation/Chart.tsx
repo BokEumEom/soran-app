@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import Animated, { 
-  useSharedValue, 
-  useAnimatedProps, 
+import Animated, {
+  useSharedValue,
+  useAnimatedProps,
   withTiming,
-  Easing
+  Easing,
 } from 'react-native-reanimated';
 import Svg, { Circle, G } from 'react-native-svg';
 
@@ -15,30 +15,32 @@ type ChartProps = {
 };
 
 const Chart: React.FC<ChartProps> = ({ score }) => {
-  const maxScore = 20; // 최대 점수
-  const percentage = score / maxScore; // 점수 비율
-  
-  const size = Dimensions.get('window').width - 80;
+  const maxScore = 20;
+  const percentage = score / maxScore;
+
+  // 차트 크기
+  const size = Dimensions.get('window').width - 230;
   const strokeWidth = 20;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  
+
+  // 애니메이션 값
   const progressValue = useSharedValue(0);
-  
+
   useEffect(() => {
     progressValue.value = withTiming(percentage, {
       duration: 1500,
       easing: Easing.bezier(0.25, 0.1, 0.25, 1),
     });
   }, [percentage]);
-  
+
   const animatedProps = useAnimatedProps(() => {
     const strokeDashoffset = circumference * (1 - progressValue.value);
     return {
       strokeDashoffset,
     };
   });
-  
+
   // 차트 색상
   const getColor = (value: number) => {
     if (value <= 0.25) return '#2ECC71'; // 초록색
@@ -46,9 +48,9 @@ const Chart: React.FC<ChartProps> = ({ score }) => {
     if (value <= 0.75) return '#E67E22'; // 주황색
     return '#E74C3C'; // 빨간색
   };
-  
+
   const color = getColor(percentage);
-  
+
   // 상태 텍스트
   const getStatusText = (value: number) => {
     if (value <= 0.25) return '안정';
@@ -58,23 +60,23 @@ const Chart: React.FC<ChartProps> = ({ score }) => {
   };
 
   return (
-    <View style={styles.container}>   
+    <View style={styles.container}>
       <View style={styles.chartContainer}>
         <Svg width={size} height={size}>
-          <G rotation="-90" origin={`${size/2}, ${size/2}`}>
+          <G rotation="-90" origin={`${size / 2}, ${size / 2}`}>
             {/* 배경 원 */}
             <Circle
-              cx={size/2}
-              cy={size/2}
+              cx={size / 2}
+              cy={size / 2}
               r={radius}
               stroke="#F0F0F0"
               strokeWidth={strokeWidth}
               fill="transparent"
             />
-            {/* 진행 원 */}
+            {/* 진행 원 (Animated) */}
             <AnimatedCircle
-              cx={size/2}
-              cy={size/2}
+              cx={size / 2}
+              cy={size / 2}
               r={radius}
               stroke={color}
               strokeWidth={strokeWidth}
@@ -85,7 +87,8 @@ const Chart: React.FC<ChartProps> = ({ score }) => {
             />
           </G>
         </Svg>
-        
+
+        {/* 차트 중앙 텍스트 */}
         <View style={styles.textContainer}>
           <Text style={[styles.percentageText, { color }]}>
             {Math.round(percentage * 100)}%
@@ -95,7 +98,8 @@ const Chart: React.FC<ChartProps> = ({ score }) => {
           </Text>
         </View>
       </View>
-      
+
+      {/* 범례 */}
       <View style={styles.legendContainer}>
         <View style={styles.legendItem}>
           <View style={[styles.legendColor, { backgroundColor: '#2ECC71' }]} />
@@ -120,43 +124,40 @@ const Chart: React.FC<ChartProps> = ({ score }) => {
 
 const styles = StyleSheet.create({
   container: {
+    minHeight: 200, // 차트가 너무 작지 않도록 최소 높이 확보
     alignItems: 'center',
-    padding: 15,
+    padding: 30,
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
     elevation: 5,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#2C3E50',
+    borderRadius: 16,
   },
   chartContainer: {
+    width: '100%',
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textContainer: {
+  textContainer: {  
     position: 'absolute',
     alignItems: 'center',
   },
   percentageText: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
   },
   statusText: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
     marginTop: 5,
   },
   legendContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0, 
     marginTop: 20,
-    width: '100%',
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    padding: 10,
+    borderRadius: 8,
   },
   legendItem: {
     flexDirection: 'row',
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   legendText: {
-    fontSize: 14,
+    fontSize: 8,
     color: '#7F8C8D',
   },
 });

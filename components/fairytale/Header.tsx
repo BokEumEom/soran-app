@@ -7,14 +7,14 @@ import CustomText from "@/components/common/CustomText";
 // 타입 정의 추가
 interface HeaderProps {
   title?: string;
-  gradientColors?: string[];
+  gradientColors?: readonly [string, string, ...string[]];
   textColor?: string;
   iconColor?: string;
 }
 
 export const Header = ({
-  title = '안녕하세요!',
-  gradientColors = ['#FFB7B7', '#FFE2E2'],
+  title = 'Awaken Your Inner Voice.',
+  gradientColors = ['#FFB7B7', '#FFE2E2'] as const,
   textColor = '#FF6B6B',
   iconColor = '#FF6B6B'
 }: HeaderProps) => (
@@ -30,8 +30,8 @@ export const Header = ({
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 48,
-    paddingBottom: 24,
+    paddingTop: 60,
+    paddingBottom: 10,
     paddingHorizontal: 20,
   },
   headerContent: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { MotiText } from 'moti';
 import CustomText from "@/components/common/CustomText";
 
 export default function ResignationHome() {
@@ -12,10 +13,27 @@ export default function ResignationHome() {
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title}>퇴사 고민 중이신가요?</CustomText>
-      <CustomText style={styles.subtitle}>
-        지금 바로 간단한 테스트를 통해 당신의 현재 상황을 분석해보세요.
-      </CustomText>
+      <View style={styles.topSection}>
+        <CustomText style={styles.title}>
+        <MotiText
+              from={{ opacity: 0, translateY: -10 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ delay: 100, duration: 500 }}
+            >
+              퇴사를 고민하고 있나요?
+            </MotiText>
+        </CustomText>
+        <CustomText style={styles.subtitle}>
+        <MotiText
+              from={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 800, duration: 600 }}
+            >
+              지금 바로 당신의 현재 상황을 바라보세요.
+            </MotiText>
+        </CustomText>
+      </View>
+
       <TouchableOpacity style={styles.button} onPress={handleStartTest}>
         <CustomText style={styles.buttonText}>테스트 시작하기</CustomText>
       </TouchableOpacity>
@@ -26,10 +44,15 @@ export default function ResignationHome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  topSection: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
   },
   title: {
     fontSize: 24,
@@ -42,23 +65,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 20,
     lineHeight: 22,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    width: '100%',
+    backgroundColor: '#87CEFA',
     paddingVertical: 15,
-    paddingHorizontal: 30,
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     elevation: 5,
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+    textAlign: 'center',
   },
 });

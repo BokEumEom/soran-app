@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#4A4A4A',
     marginBottom: 5,
+    paddingLeft: 10,
   },
   progressBar: {
     height: 14,
@@ -62,7 +63,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#4A4A4A',
     marginTop: 3,
-    right: -120
+    textAlign: 'right',
+    paddingRight: 10,
+    // right: -120
   },
   dashboardButton: {
     flex: 1,

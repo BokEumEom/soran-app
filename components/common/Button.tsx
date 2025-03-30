@@ -12,7 +12,7 @@ import { ButtonProps } from '../../types/common';
 import CustomText from "@/components/common/CustomText";
 
 interface CustomButtonProps extends ButtonProps {
-  gradientColors?: string[];
+  gradientColors?: readonly [string, string, ...string[]];
   style?: ViewStyle;
   textStyle?: TextStyle;
 }
