@@ -337,10 +337,6 @@ export function useReversiGame() {
     return { startRotation, style };
   };
 
-  const createCheckerboardTransition = (rows, cols) => {
-    // ... existing code ...
-  };
-
   // 디스크 뒤집기 효과 (Flip Effect)
   const flipAnimation = () => {
     // Y축 회전 애니메이션 값
@@ -388,7 +384,6 @@ export function useReversiGame() {
     resetGame,
     exitGameWithAnimation,
     cubeRotation,
-    createCheckerboardTransition,
     flipAnimation
   };
 } 

@@ -11,8 +11,8 @@ const ResignationBanner: React.FC = () => {
         <View style={styles.bannerBackground}>
           <Ionicons name="exit-outline" size={28} style={styles.bannerIcon} />
           <View>
-            <CustomText style={styles.bannerTitle}>퇴사 고민 중이신가요?</CustomText>
-            <CustomText style={styles.bannerSubtitle}>퇴사 게이지를 체크해보세요</CustomText>
+            <CustomText style={styles.bannerTitle}>퇴사를 고민하고 있나요?</CustomText>
+            <CustomText style={styles.bannerSubtitle}>현재 당신의 상태를 알아보아요.</CustomText>
           </View>
         </View>
       </TouchableOpacity>
