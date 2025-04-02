@@ -16,9 +16,9 @@ import { emotions, type Emotion, type EmotionIconName } from '@/constants/emotio
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Constants
-const GRADIENT_WIDTH = SCREEN_WIDTH > 768 ? 300 : SCREEN_WIDTH * 0.85;
+const GRADIENT_WIDTH = SCREEN_WIDTH > 768 ? 300 : SCREEN_WIDTH * 0.55;
 const GRADIENT_HEIGHT_RATIO = SCREEN_HEIGHT > 700 ? 0.5 : 0.4;
-const ICON_SIZE = SCREEN_WIDTH > 768 ? 200 : SCREEN_WIDTH * 0.4;
+const ICON_SIZE = SCREEN_WIDTH > 768 ? 200 : SCREEN_WIDTH * 0.2;
 const BUTTON_WIDTH_RATIO = SCREEN_WIDTH > 768 ? 0.6 : 0.8;
 const BUTTON_BOTTOM_MARGIN = 30;
 const BUTTON_PADDING = 15;
@@ -49,13 +49,13 @@ export default function EmotionsSlider() {
       const scale = interpolate(
         translateX.value,
         [index - 1, index, index + 1],
-        [1.4, 1, 1.4]
+        [1.2, 1, 1.2]
       );
 
       const rotate = `${interpolate(
         translateX.value,
         [index - 1, index, index + 1],
-        [-10, 0, 10]
+        [-10, 0, 0]
       )}deg`;
 
       return {
@@ -110,7 +110,7 @@ export default function EmotionsSlider() {
         ))}
       </Animated.ScrollView>
 
-      <TouchableOpacity 
+      {/* <TouchableOpacity 
         style={[
           styles.setMoodButton,
           { opacity: 0.95 } // 버튼 투명도 추가
@@ -119,6 +119,13 @@ export default function EmotionsSlider() {
         activeOpacity={0.7} // 터치 피드백 개선
       >
         <CustomText style={styles.setMoodText}>LETS GO!</CustomText>
+      </TouchableOpacity> */}
+            <TouchableOpacity 
+        style={styles.button}
+        onPress={handleSetMood}
+        activeOpacity={0.7}
+      >
+        <CustomText style={styles.buttonText}>LETS GO!</CustomText>
       </TouchableOpacity>
     </View>
   );
@@ -167,23 +174,39 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 10,
   },
-  setMoodButton: {
+  // setMoodButton: {
+  //   position: 'absolute',
+  //   bottom: BUTTON_BOTTOM_MARGIN,
+  //   width: SCREEN_WIDTH * BUTTON_WIDTH_RATIO > 400 ? 400 : SCREEN_WIDTH * BUTTON_WIDTH_RATIO,
+  //   backgroundColor: '#FFF',
+  //   borderRadius: BUTTON_BORDER_RADIUS,
+  //   paddingVertical: BUTTON_PADDING,
+  //   alignItems: 'center',
+  //   shadowColor: '#000',
+  //   shadowOffset: { width: 0, height: 4 },
+  //   shadowOpacity: 0.2,
+  //   shadowRadius: 4,
+  //   elevation: 4,
+  // },
+  // setMoodText: {
+  //   color: '#333',
+  //   fontSize: 18,
+  //   fontWeight: 'bold',
+  // },
+  button: {
+    width: SCREEN_WIDTH - 40, // 전체 너비에서 좌우 20씩 제외
+    backgroundColor: '#87CEFA',
+    paddingVertical: 15,
+    borderRadius: 8,
+    elevation: 5,
     position: 'absolute',
     bottom: BUTTON_BOTTOM_MARGIN,
-    width: SCREEN_WIDTH * BUTTON_WIDTH_RATIO > 400 ? 400 : SCREEN_WIDTH * BUTTON_WIDTH_RATIO,
-    backgroundColor: '#FFF',
-    borderRadius: BUTTON_BORDER_RADIUS,
-    paddingVertical: BUTTON_PADDING,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    paddingHorizontal: 20,
   },
-  setMoodText: {
-    color: '#333',
+  buttonText: {
+    color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });

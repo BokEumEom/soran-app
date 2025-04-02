@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    paddingVertical: 10, // 세로 패딩 줄임
+    // paddingVertical: 10, // 세로 패딩 줄임
     borderRadius: 8,
     marginHorizontal: 5,
   },
