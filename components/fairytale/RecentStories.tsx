@@ -27,7 +27,7 @@ export const RecentStories = ({ stories, onStoryPress, imagesLoaded, onImageLoad
           <StoryImage
             uri={story.image}
             style={styles.recentImage}
-            storyId={story.id}
+            storyId={story.id || 'default'}
             imagesLoaded={imagesLoaded}
             onLoadChange={(id, isLoaded) => onImageLoadChange(id, isLoaded)}
           />
@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   recentImage: {
-    width: width * 0.26,
-    height: height * 0.17,
+    width: width * 0.35,
+    height: height * 0.25,
     borderRadius: 16,
   },
   recentTitle: {
