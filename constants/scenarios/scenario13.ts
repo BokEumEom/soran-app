@@ -2,7 +2,7 @@ import { Scenario } from '@/types/scenario';
 
 export const scenario13: Scenario = {
   id: 13,
-  title: '새로운 도시에 이사한 후 외로움을 느낄 때',
+  title: '새로운 곳에 거주지를 옮긴 후 외로움',
   description: '새로운 도시에 이사한 후 외로움을 느끼는 상황에서, 어떻게 사회적 관계를 형성하고 적응할지 함께 고민해봐요.',
   chapters: [
     {

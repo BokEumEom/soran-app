@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   recentImage: {
     width: width * 0.26,
-    height: height * 0.17,
+    height: height * 0.25,
     borderRadius: 16,
   },
   recentTitle: {

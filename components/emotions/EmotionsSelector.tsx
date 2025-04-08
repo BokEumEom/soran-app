@@ -71,7 +71,7 @@ export default function EmotionsSlider() {
 
   return (
     <View style={styles.container}>
-      <Animated.ScrollView
+      <Animated.ScrollView 
         horizontal
         pagingEnabled
         scrollEventThrottle={16}

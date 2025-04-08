@@ -2,7 +2,7 @@ import { Scenario } from '@/types/scenario';
 
 export const scenario14: Scenario = {
   id: 14,
-  title: '모르는 사람에게 도움을 요청받았을 때',
+  title: '모르는 사람이 도움을 요청할 때',
   description:
     '길을 가던 중 모르는 사람이 도움을 요청하는 상황입니다. 이때 어떻게 대처할 것인지 선택합니다.',
   chapters: [

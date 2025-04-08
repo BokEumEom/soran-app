@@ -2,7 +2,7 @@ import { Scenario } from '@/types/scenario';
 
 export const scenario8: Scenario = {
   id: 8,
-  title: '중요한 사람과의 관계에서 신뢰가 깨졌을 때',
+  title: '소중한 인연과 신뢰가 깨졌을 때',
   description: '친구나 연인의 배신으로 인해 신뢰가 무너진 상황이에요. 이제 어떻게 대처할지 한 번 고민해볼까요?',
   chapters: [
     {

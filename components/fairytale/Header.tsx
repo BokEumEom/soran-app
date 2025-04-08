@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 export const Header = ({
-  title = 'Awaken Your Inner Voice.',
+  title = '당신의 하루, 소란하지 않길',
   gradientColors = ['#FFB7B7', '#FFE2E2'] as const,
   textColor = '#FF6B6B',
   iconColor = '#FF6B6B'
